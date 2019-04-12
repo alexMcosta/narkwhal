@@ -19,8 +19,14 @@ func main() {
   // Create a service with our session
   svc := ec2.New(sess)
 
-  // Output the results of of the volumes 
-  result, err := svc.DescribeVolumes(&ec2.DescribeVolumesInput{})
+  // Output the results of of the volumes
+  fmt.Println(grabVolumes(svc))
+}
+
+func grabVolumes(svc *ec2.EC2) (volume *ec2.DescribeVolumesOutput){
+
+  // Output the results of of the volumes
+  volumes, err := svc.DescribeVolumes(&ec2.DescribeVolumesInput{})
   if err != nil {
       if aerr, ok := err.(awserr.Error); ok {
           switch aerr.Code() {
@@ -35,5 +41,5 @@ func main() {
       return
   }
 
-  fmt.Println(result)
+  return volumes
 }
