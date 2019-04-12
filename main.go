@@ -2,6 +2,8 @@ package main
 
 import (
   "fmt"
+  "encoding/json"
+  "time"
 
   "github.com/aws/aws-sdk-go/service/ec2"
   "github.com/aws/aws-sdk-go/aws/awserr"
@@ -9,7 +11,6 @@ import (
   )
 
 func main() {
-
   // First let us configure the session
   // This session will take the default credentials found at ~/.aws/
   sess := session.Must(session.NewSessionWithOptions(session.Options{
@@ -19,8 +20,12 @@ func main() {
   // Create a service with our session
   svc := ec2.New(sess)
 
-  // Output the results of of the volumes
-  fmt.Println(grabVolumes(svc))
+  // Grab the data from AWS and Marshal it
+  data, _ := json.Marshal(grabVolumes(svc))
+
+  // Output the struct of the marshaled AWS Data
+  fmt.Println(parseIt(data))
+
 }
 
 func grabVolumes(svc *ec2.EC2) (volume *ec2.DescribeVolumesOutput){
@@ -42,4 +47,51 @@ func grabVolumes(svc *ec2.EC2) (volume *ec2.DescribeVolumesOutput){
   }
 
   return volumes
+}
+
+func parseIt(data []byte) interface{}{
+  // Turn data into a string for easier ingesting
+  //var dataByteArray = []byte(data.GoString())
+
+  //Make a Volume struct for JSON parsing
+  type Attachments struct {
+    AttachTime          *time.Time
+    DeleteOnTermination bool
+    Device              string
+    InstanceId          string
+    State               string
+    VolumeId            string
+  }
+
+  type Tags struct {
+    Key   string `JSON:"Key"`
+    Value string `JSON:"Value"`
+  }
+
+  type Volumes struct {
+    Attachments      []Attachments
+    AvailabilityZone string     `JSON:"AvailabilityZone"`
+    CreateTime       *time.Time `JSON:"CreateTime"`
+    Encrypted        bool       `JSON:"Encrypted"`
+    Iops             int        `JSON:"Iops"`
+    Size             int        `JSON:"Size"`
+    SnapshotId       string     `JSON:"SnapshotId"`
+    State            string     `JSON:"State"`
+    Tags             []Tags
+    VolumeId         string     `JSON:"VolumeId"`
+    VolumeType       string     `JSON:"VolumeType"`
+  }
+
+  type Volume struct {
+    Volumes []Volumes
+	}
+
+  var dataVolumes Volume
+
+  err := json.Unmarshal(data, &dataVolumes)
+  if err != nil {
+    fmt.Println("error:", err)
+  }
+
+  return dataVolumes
 }
