@@ -7,10 +7,27 @@ import (
   "github.com/aws/aws-sdk-go/aws/awserr"
 )
 
+// Go get all the data of all the volumes
 func GrabAllVolumesData(svc *ec2.EC2) (volume *ec2.DescribeVolumesOutput){
-
-  // Output the results of of the volumes
   volumes, err := svc.DescribeVolumes(&ec2.DescribeVolumesInput{})
+  if err != nil {
+      if aerr, ok := err.(awserr.Error); ok {
+          switch aerr.Code() {
+          default:
+              fmt.Println(aerr.Error())
+          }
+      } else {
+          fmt.Println(err.Error())
+      }
+      return
+  }
+  return volumes
+}
+
+// Go get all the "available" / unused volumes snapshot ID's
+func RemoveOldEBS(svc *ec2.EC2, input *ec2.DeleteVolumeInput) {
+
+  result, err := svc.DeleteVolume(input)
   if err != nil {
       if aerr, ok := err.(awserr.Error); ok {
           switch aerr.Code() {
@@ -25,5 +42,7 @@ func GrabAllVolumesData(svc *ec2.EC2) (volume *ec2.DescribeVolumesOutput){
       return
   }
 
-  return volumes
+  fmt.Println(result)
 }
+
+// Go get

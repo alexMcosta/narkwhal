@@ -1,0 +1,3 @@
+package Digest
+
+import "testing"
