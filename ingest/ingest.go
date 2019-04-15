@@ -9,6 +9,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/ec2"
 )
 
+// createSession Creates gthe sessions needed to work with the AWS SDk
 func createSession() *ec2.EC2 {
 	sess := session.Must(session.NewSessionWithOptions(session.Options{
 		SharedConfigState: session.SharedConfigEnable,
@@ -17,8 +18,8 @@ func createSession() *ec2.EC2 {
 	return svc
 }
 
-// Go get all the data of all the volumes
-func GrabAllVolumesData() (volume *ec2.DescribeVolumesOutput) {
+// grabAvailableVolumeIDs Uses the AWS SDK to search for all available volumes in the current region
+func GrabAvailableVolumesIDs() (volume *ec2.DescribeVolumesOutput) {
 
 	// Create a session
 	svc := createSession()
@@ -33,6 +34,7 @@ func GrabAllVolumesData() (volume *ec2.DescribeVolumesOutput) {
 			},
 		},
 	}
+
 	volumes, err := svc.DescribeVolumes(input)
 	if err != nil {
 		if aerr, ok := err.(awserr.Error); ok {
@@ -45,6 +47,7 @@ func GrabAllVolumesData() (volume *ec2.DescribeVolumesOutput) {
 		}
 		return
 	}
+
 	return volumes
 }
 

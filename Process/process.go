@@ -5,16 +5,19 @@ import (
 	"fmt"
 )
 
+type Volumes struct {
+	VolumeId string `JSON:"VolumeId"`
+}
+
+type Volume struct {
+	Volumes []Volumes
+}
+
+func (v Volumes) getVolumeId() string {
+	return v.VolumeId
+}
+
 func ParseIt(data []byte) interface{} {
-
-	type Volumes struct {
-		State    string `JSON:"State"`
-		VolumeId string `JSON:"VolumeId"`
-	}
-
-	type Volume struct {
-		Volumes []Volumes
-	}
 
 	var dataVolumes Volume
 
