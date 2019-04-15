@@ -3,25 +3,13 @@ package ingest
 import (
 	"fmt"
 
-	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/service/ec2"
 )
 
 // Go get all the data of all the volumes
 func GrabAllVolumesData(svc *ec2.EC2) (volume *ec2.DescribeVolumesOutput) {
-	// Let us filter for all available EBS volumes
-	input := &ec2.DescribeVolumesInput{
-		Filters: []*ec2.Filter{
-			{
-				Name: aws.String("status"),
-				Values: []*string{
-					aws.String("available"),
-				},
-			},
-		},
-	}
-	volumes, err := svc.DescribeVolumes(input)
+	volumes, err := svc.DescribeVolumes(&ec2.DescribeVolumesInput{})
 	if err != nil {
 		if aerr, ok := err.(awserr.Error); ok {
 			switch aerr.Code() {
@@ -47,6 +35,8 @@ func RemoveOldEBS(svc *ec2.EC2, input *ec2.DeleteVolumeInput) {
 				fmt.Println(aerr.Error())
 			}
 		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
 			fmt.Println(err.Error())
 		}
 		return
@@ -54,5 +44,3 @@ func RemoveOldEBS(svc *ec2.EC2, input *ec2.DeleteVolumeInput) {
 
 	fmt.Println(result)
 }
-
-// Go get

@@ -1,3 +1,0 @@
-package Digest
-
-import "testing"
