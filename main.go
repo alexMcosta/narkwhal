@@ -4,25 +4,22 @@ import (
 	"encoding/json"
 	"fmt"
 
-	digest "github.com/alexMcosta/narkwhal/Digest"
+	digest "github.com/alexMcosta/narkwhal/Ingest"
 	process "github.com/alexMcosta/narkwhal/Process"
-
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/ec2"
 )
 
 func main() {
 	// Setup session and service using default credentials found at ~/.aws/
-	sess := session.Must(session.NewSessionWithOptions(session.Options{
-		SharedConfigState: session.SharedConfigEnable,
-	}))
+	// sess := session.Must(session.NewSessionWithOptions(session.Options{
+	// 	SharedConfigState: session.SharedConfigEnable,
+	// }))
 
-	// Service made
-	svc := ec2.New(sess)
+	// // Service made
+	// svc := ec2.New(sess)
 
 	// Grab the data from AWS and Marshal it
 	// TODO: Add the marshaling into the function?
-	data, _ := json.Marshal(digest.GrabAllVolumesData(svc))
+	data, _ := json.Marshal(digest.GrabAllVolumesData())
 
 	// Output the struct of the marshaled AWS data
 	volumes := process.ParseIt(data)
