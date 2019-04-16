@@ -29,7 +29,6 @@ func GrabAvailableVolumesIDs() (volume *ec2.DescribeVolumesOutput) {
 		return
 	} else {
 
-		// Create a session
 		svc := createSession()
 		// Let us filter for all available EBS volumes
 		input := &ec2.DescribeVolumesInput{
@@ -61,7 +60,9 @@ func GrabAvailableVolumesIDs() (volume *ec2.DescribeVolumesOutput) {
 
 // RemoveAvailableEBS Removes all avail able EBS volumes based on the current default region
 func RemoveAvailableEBS(input []process.Volumes) {
-	//Print a message if the
+
+	// Print a message if there are no EBS volumes to delete
+	// Or keep going to remove the volumes
 	if input == nil {
 		fmt.Println("RemoveAvailableEBSVolumes(): There are no EBS volumes to remove")
 	} else {
