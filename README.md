@@ -9,7 +9,7 @@ Narkwhal goes through your AWS account using the AWS SDK looking for available E
 ### Requirements
 - Narkwhal makes use of the AWS credentials folder. More information on this at the following link, [AWS Credentials folder](https://docs.aws.amazon.com/sdk-for-go/v1/developer-guide/configuring-sdk.html#creating-the-credentials-file)
 
-- Go. This has been only tested and confirmed to work on 1.11 and never
+- Go. This has been only tested and confirmed to work on 1.11 and newer
 
 ### Installing on Mac
 
