@@ -9,23 +9,49 @@ Narkwhal goes through your AWS account using the AWS SDK looking for available E
 ### Requirements
 - Narkwhal makes use of the AWS credentials folder. More information on this at the following link, [AWS Credentials folder](https://docs.aws.amazon.com/sdk-for-go/v1/developer-guide/configuring-sdk.html#creating-the-credentials-file)
 
-### Installing
+### Installing on Mac
 
-A step by step series of examples that tell you how to get a development env running
-
-Say what the step will be
-
+Install by doing the following:
 ```
-Give the example
+wget https://github.com/alexMcosta/narkwhal/releases/download/0.1.0/narkwhal
 ```
 
-And repeat
-
+Then from the file you installed it you can run
 ```
-until finished
+./narkwhal -h
 ```
 
-End with an example of getting some data out of the system or using it for a little demo
+If you see the following then it is working and tells you the commands
+```
+Usage of ./narkwhal:
+  -account string
+    	Lets you select witch AWS account you would like to make changes to (default "default")
+  -region string
+    	Lets you select which region you would like to run Narkwhal on (default "us-east-1")
+```
+
+Example of EBS volumes found and successful removal:
+```
+$ ./narkwhal -region ap-northeast-1                                                                          2 ↵
+account: default, region: ap-northeast-1
+---------------------
+vol-0466fbaa999d132a6
+---------------------
+Would you like to remove the above EBS Volumes? (y/n):
+y
+Successfully removed vol-0466fbaa999d132a6
+```
+
+Example of no available EBS volumes in the region:
+```
+$ ./narkwhal -region ap-northeast-1
+account: default, region: ap-northeast-1
+---------------------
+~~~~~~~~~~~~~~~~~~~~~~~
+EXITING: There are no available EBS volumes in the ap-northeast-1 region to remove
+~~~~~~~~~~~~~~~~~~~~~~~
+---------------------
+```
 
 ### Feature Ideas
 
@@ -43,5 +69,3 @@ End with an example of getting some data out of the system or using it for a lit
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-
