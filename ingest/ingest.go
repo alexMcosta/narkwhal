@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/alexmcosta/narkwhal/process"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -54,17 +53,18 @@ func GrabAvailableVolumesIDs(accountFlag string, regionFlag string) (volume *ec2
 
 	// If there are no available EBS volumes then quit application
 	// Else continue
-	if volume == nil {
-		fmt.Println("GrabAvailableVolumesIDs: There are no available EBS volumes")
-		os.Exit(1)
-		return
-	} else {
-		return volumes
-	}
+	// if volume == nil {
+	// 	fmt.Println("GrabAvailableVolumesIDs: There are no available EBS volumes")
+	// 	os.Exit(1)
+	// 	return
+	// } else {
+	return volumes
+	// }
 }
 
 // RemoveAvailableEBS Removes all avail able EBS volumes based on the current default region
-func RemoveAvailableEBS(input []process.Volumes, accountFlag string, regionFlag string) {
+func RemoveAvailableEBS(accountFlag string, regionFlag string) {
+	input := GrabAvailableVolumesIDs(accountFlag, regionFlag)
 
 	// Print a message if there are no EBS volumes to delete
 	// Or keep going to remove the volumes
@@ -72,12 +72,12 @@ func RemoveAvailableEBS(input []process.Volumes, accountFlag string, regionFlag 
 		fmt.Println("RemoveAvailableEBSVolumes(): There are no EBS volumes to remove")
 	} else {
 
-		for _, value := range input {
+		for _, value := range input.Volumes {
 
 			svc := createSession(accountFlag, regionFlag)
 
 			deleteInput := &ec2.DeleteVolumeInput{
-				VolumeId: aws.String(value.VolumeId),
+				VolumeId: aws.String(*value.VolumeId),
 			}
 
 			_, err := svc.DeleteVolume(deleteInput)

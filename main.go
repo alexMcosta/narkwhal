@@ -2,13 +2,11 @@ package main
 
 import (
 	"bufio"
-	"encoding/json"
 	"flag"
 	"fmt"
 	"os"
 
 	"github.com/alexmcosta/narkwhal/ingest"
-	"github.com/alexmcosta/narkwhal/process"
 )
 
 // A looping confirmation function to make sure the user selects yes or no
@@ -36,21 +34,23 @@ func main() {
 
 	// Grab all available volumes and marshal them
 	volumeIDs := ingest.GrabAvailableVolumesIDs(*accountFlag, *regionFlag)
-	data, _ := json.Marshal(volumeIDs)
+	// data, _ := json.Marshal(volumeIDs)
+
+	//fmt.Println(*volumeIDs.Volumes[0].VolumeId)
 
 	// Process the data and make structs
-	volumes := process.GetStructOfVolumes(data)
+	// volumes := process.GetStructOfVolumes(data)
 
 	//Tell user the volume ID's and confirm deletion
 	fmt.Println("---------------------")
-	fmt.Println(volumes)
+	fmt.Println(*volumeIDs.Volumes[0].VolumeId)
 	fmt.Println("---------------------")
 	fmt.Println("Would you like to remove the above EBS Volumes? (y/n): ")
 
 	// Get confirmation they want the EBS volumes deleted
 	response := confirm()
 	if response == true {
-		ingest.RemoveAvailableEBS(volumes, *accountFlag, *regionFlag)
+		ingest.RemoveAvailableEBS(*accountFlag, *regionFlag)
 	} else {
 		fmt.Println("---------\nExiting: Nothing deleted\n---------")
 	}
