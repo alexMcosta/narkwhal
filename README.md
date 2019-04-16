@@ -12,7 +12,7 @@ Narkwhal goes through your AWS account using the AWS SDK looking for available E
 
 #### Turn application into CLI Application
 - Add flags for choosing which account in `.aws/credentials` folder.
-- Add flag for choosing region (Including all regions)
+[X] Add flag for choosing region (Including all regions)
 - Add flag for time stamp date
 - Add flag for either choosing specific id's or all EBS volumes
 

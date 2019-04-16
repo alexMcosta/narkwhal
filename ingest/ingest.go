@@ -11,7 +11,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/ec2"
 )
 
-// createSession Creates gthe sessions needed to work with the AWS SDk
+// createSession Creates the sessions needed to work with the AWS SDk
 func createSession(accountFlag string, regionFlag string) *ec2.EC2 {
 	sess := session.Must(session.NewSessionWithOptions(session.Options{
 		Config:  aws.Config{Region: aws.String(regionFlag)},
@@ -21,7 +21,7 @@ func createSession(accountFlag string, regionFlag string) *ec2.EC2 {
 	return svc
 }
 
-// grabAvailableVolumeIDs Uses the AWS SDK to search for all available volumes in the current region
+// GrabAvailableVolumeIDs Uses the AWS SDK to search for all available volumes in the current region
 func GrabAvailableVolumesIDs(accountFlag string, regionFlag string) (volume *ec2.DescribeVolumesOutput) {
 
 	svc := createSession(accountFlag, regionFlag)

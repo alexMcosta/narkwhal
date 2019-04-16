@@ -11,6 +11,7 @@ import (
 	"github.com/alexmcosta/narkwhal/process"
 )
 
+// A looping confirmation function to make sure the user selects yes or no
 func confirm() bool {
 	reader := bufio.NewReader(os.Stdin)
 	text, _, _ := reader.ReadRune()
@@ -37,7 +38,7 @@ func main() {
 	volumeIDs := ingest.GrabAvailableVolumesIDs(*accountFlag, *regionFlag)
 	data, _ := json.Marshal(volumeIDs)
 
-	// Process the ID's And make them structs
+	// Process the data and make structs
 	volumes := process.GetStructOfVolumes(data)
 
 	//Tell user the volume ID's and confirm deletion
@@ -46,14 +47,11 @@ func main() {
 	fmt.Println("---------------------")
 	fmt.Println("Would you like to remove the above EBS Volumes? (y/n): ")
 
+	// Get confirmation they want the EBS volumes deleted
 	response := confirm()
-
 	if response == true {
 		ingest.RemoveAvailableEBS(volumes, *accountFlag, *regionFlag)
 	} else {
 		fmt.Println("---------\nExiting: Nothing deleted\n---------")
 	}
-
-	// Remove any availble structs
-	//ingest.RemoveAvailableEBS(volumes, *accountFlag, *regionFlag)
 }
