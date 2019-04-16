@@ -12,54 +12,59 @@ import (
 )
 
 // createSession Creates gthe sessions needed to work with the AWS SDk
-func createSession() *ec2.EC2 {
+func createSession(accountFlag string, regionFlag string) *ec2.EC2 {
 	sess := session.Must(session.NewSessionWithOptions(session.Options{
-		SharedConfigState: session.SharedConfigEnable,
+		Config:  aws.Config{Region: aws.String(regionFlag)},
+		Profile: accountFlag,
 	}))
 	svc := ec2.New(sess)
 	return svc
 }
 
 // grabAvailableVolumeIDs Uses the AWS SDK to search for all available volumes in the current region
-func GrabAvailableVolumesIDs() (volume *ec2.DescribeVolumesOutput) {
+func GrabAvailableVolumesIDs(accountFlag string, regionFlag string) (volume *ec2.DescribeVolumesOutput) {
 
+	svc := createSession(accountFlag, regionFlag)
+	// Let us filter for all available EBS volumes
+	input := &ec2.DescribeVolumesInput{
+		Filters: []*ec2.Filter{
+			{
+				Name: aws.String("status"),
+				Values: []*string{
+					aws.String("available"),
+				},
+			},
+		},
+	}
+
+	// Go get them volumes and send an AWS error if there is one
+	volumes, err := svc.DescribeVolumes(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			default:
+				fmt.Println(aerr.Error())
+				os.Exit(1)
+			}
+		} else {
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	// If there are no available EBS volumes then quit application
+	// Else continue
 	if volume == nil {
 		fmt.Println("GrabAvailableVolumesIDs: There are no available EBS volumes")
 		os.Exit(1)
 		return
 	} else {
-
-		svc := createSession()
-		// Let us filter for all available EBS volumes
-		input := &ec2.DescribeVolumesInput{
-			Filters: []*ec2.Filter{
-				{
-					Name: aws.String("status"),
-					Values: []*string{
-						aws.String("available"),
-					},
-				},
-			},
-		}
-
-		volumes, err := svc.DescribeVolumes(input)
-		if err != nil {
-			if aerr, ok := err.(awserr.Error); ok {
-				switch aerr.Code() {
-				default:
-					fmt.Println(aerr.Error())
-				}
-			} else {
-				fmt.Println(err.Error())
-			}
-			return
-		}
 		return volumes
 	}
 }
 
 // RemoveAvailableEBS Removes all avail able EBS volumes based on the current default region
-func RemoveAvailableEBS(input []process.Volumes) {
+func RemoveAvailableEBS(input []process.Volumes, accountFlag string, regionFlag string) {
 
 	// Print a message if there are no EBS volumes to delete
 	// Or keep going to remove the volumes
@@ -69,7 +74,7 @@ func RemoveAvailableEBS(input []process.Volumes) {
 
 		for _, value := range input {
 
-			svc := createSession()
+			svc := createSession(accountFlag, regionFlag)
 
 			deleteInput := &ec2.DeleteVolumeInput{
 				VolumeId: aws.String(value.VolumeId),
