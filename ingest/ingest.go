@@ -52,48 +52,58 @@ func GrabAvailableVolumesIDs(accountFlag string, regionFlag string) (volume *ec2
 	}
 
 	// If there are no available EBS volumes then quit application
-	// Else continue
-	// if volume == nil {
-	// 	fmt.Println("GrabAvailableVolumesIDs: There are no available EBS volumes")
-	// 	os.Exit(1)
-	// 	return
-	// } else {
+	if volumes == nil {
+		fmt.Println("GrabAvailableVolumesIDs: There are no available EBS volumes")
+		os.Exit(1)
+		return
+	}
+
 	return volumes
-	// }
+}
+
+// ListVolumeIDs will list the volume IDs that are about to be deleted
+func ListVolumeIDs(accountFlag string, regionFlag string) {
+	input := GrabAvailableVolumesIDs(accountFlag, regionFlag)
+
+	if input.Volumes == nil {
+		fmt.Println("~~~~~~~~~~~~~~~~~~~~~~~")
+		fmt.Printf("EXITING: There are no available EBS volumes in the %s region to remove\n", regionFlag)
+		fmt.Println("~~~~~~~~~~~~~~~~~~~~~~~")
+		fmt.Println("---------------------")
+		os.Exit(1)
+	} else {
+		for _, value := range input.Volumes {
+			fmt.Println(*value.VolumeId)
+		}
+	}
 }
 
 // RemoveAvailableEBS Removes all avail able EBS volumes based on the current default region
 func RemoveAvailableEBS(accountFlag string, regionFlag string) {
+
 	input := GrabAvailableVolumesIDs(accountFlag, regionFlag)
 
-	// Print a message if there are no EBS volumes to delete
-	// Or keep going to remove the volumes
-	if input == nil {
-		fmt.Println("RemoveAvailableEBSVolumes(): There are no EBS volumes to remove")
-	} else {
+	for _, value := range input.Volumes {
 
-		for _, value := range input.Volumes {
+		svc := createSession(accountFlag, regionFlag)
 
-			svc := createSession(accountFlag, regionFlag)
-
-			deleteInput := &ec2.DeleteVolumeInput{
-				VolumeId: aws.String(*value.VolumeId),
-			}
-
-			_, err := svc.DeleteVolume(deleteInput)
-			if err != nil {
-				if aerr, ok := err.(awserr.Error); ok {
-					switch aerr.Code() {
-					default:
-						fmt.Println(aerr.Error())
-					}
-				} else {
-					fmt.Println(err.Error())
-				}
-			}
-
-			fmt.Println("Successfully removed", value.VolumeId)
-
+		deleteInput := &ec2.DeleteVolumeInput{
+			VolumeId: aws.String(*value.VolumeId),
 		}
+
+		_, err := svc.DeleteVolume(deleteInput)
+		if err != nil {
+			if aerr, ok := err.(awserr.Error); ok {
+				switch aerr.Code() {
+				default:
+					fmt.Println(aerr.Error())
+				}
+			} else {
+				fmt.Println(err.Error())
+			}
+		}
+
+		fmt.Println("Successfully removed", *value.VolumeId)
+
 	}
 }

@@ -32,18 +32,9 @@ func main() {
 	flag.Parse()
 	fmt.Printf("account: %s, region: %s\n", *accountFlag, *regionFlag)
 
-	// Grab all available volumes and marshal them
-	volumeIDs := ingest.GrabAvailableVolumesIDs(*accountFlag, *regionFlag)
-	// data, _ := json.Marshal(volumeIDs)
-
-	//fmt.Println(*volumeIDs.Volumes[0].VolumeId)
-
-	// Process the data and make structs
-	// volumes := process.GetStructOfVolumes(data)
-
 	//Tell user the volume ID's and confirm deletion
 	fmt.Println("---------------------")
-	fmt.Println(*volumeIDs.Volumes[0].VolumeId)
+	ingest.ListVolumeIDs(*accountFlag, *regionFlag)
 	fmt.Println("---------------------")
 	fmt.Println("Would you like to remove the above EBS Volumes? (y/n): ")
 
