@@ -9,11 +9,13 @@ import (
 )
 
 func main() {
-	cats := ingest.GrabAvailableVolumesIDs()
-	data, _ := json.Marshal(cats)
+	volumeIDs := ingest.GrabAvailableVolumesIDs()
+	data, _ := json.Marshal(volumeIDs)
 
 	// Output the struct of the marshaled AWS data
-	volumes := process.ParseIt(data)
+	volumes := process.GetMapOfIDs(data)
 
 	fmt.Println(volumes)
+
+	ingest.RemoveAvailableEBS(volumes)
 }

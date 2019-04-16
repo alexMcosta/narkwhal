@@ -3,6 +3,7 @@ package ingest
 import (
 	"fmt"
 
+	"github.com/alexmcosta/narkwhal/process"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -51,25 +52,29 @@ func GrabAvailableVolumesIDs() (volume *ec2.DescribeVolumesOutput) {
 	return volumes
 }
 
-// Go get all the "available" / unused volumes snapshot ID's
-func RemoveOldEBS(input *ec2.DeleteVolumeInput) {
+// RemoveAvailableEBS Removes all avail able EBS volumes based on the current default region
+func RemoveAvailableEBS(input []process.Volumes) {
+	for _, value := range input {
 
-	svc := createSession()
+		svc := createSession()
 
-	result, err := svc.DeleteVolume(input)
-	if err != nil {
-		if aerr, ok := err.(awserr.Error); ok {
-			switch aerr.Code() {
-			default:
-				fmt.Println(aerr.Error())
-			}
-		} else {
-			fmt.Println(err.Error())
+		deleteInput := &ec2.DeleteVolumeInput{
+			VolumeId: aws.String(value.VolumeId),
 		}
-		return
+
+		_, err := svc.DeleteVolume(deleteInput)
+		if err != nil {
+			if aerr, ok := err.(awserr.Error); ok {
+				switch aerr.Code() {
+				default:
+					fmt.Println(aerr.Error())
+				}
+			} else {
+				fmt.Println(err.Error())
+			}
+		}
+
+		fmt.Println("Successfully removed", value.VolumeId)
+
 	}
-
-	fmt.Println(result)
 }
-
-// Go get
