@@ -77,4 +77,9 @@ func RemoveAvailableEBS(input []process.Volumes) {
 		fmt.Println("Successfully removed", value.VolumeId)
 
 	}
+
+	//Print a message if the
+	if input == nil {
+		fmt.Println("RemoveAvailableEBSVolumes(): There are no EBS volumes to remove")
+	}
 }
