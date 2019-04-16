@@ -66,9 +66,9 @@ func ListVolumeIDs(accountFlag string, regionFlag string) {
 	input := GrabAvailableVolumesIDs(accountFlag, regionFlag)
 
 	if input.Volumes == nil {
-		fmt.Println("~~~~~~~~~~~~~~~~~~~~~~~")
+		fmt.Println("~~~~~~~~~~~~~~~~~~()~~~~")
 		fmt.Printf("EXITING: There are no available EBS volumes in the %s region to remove\n", regionFlag)
-		fmt.Println("~~~~~~~~~~~~~~~~~~~~~~~")
+		fmt.Println("~~~~~~~~~~~~~~~~~~()~~~~")
 		fmt.Println("---------------------")
 		os.Exit(1)
 	} else {
