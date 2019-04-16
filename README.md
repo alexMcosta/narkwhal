@@ -61,13 +61,14 @@ EXITING: There are no available EBS volumes in the ap-northeast-1 region to remo
 ```
 
 ### Feature Ideas
-
-#### Turn application into CLI Application
-- [Close need testing] Add flags for choosing which account in `.aws/credentials` folder.
+- [X] Add flag for choosing which account in `.aws/credentials` folder.
 - [X] Add flag for choosing region
-- Make it so you can scour all regions
+- Add the ability to scour all regions
+- Add the ability to scour all accounts
 - Add flag for time stamp date
 - Add flag for either choosing specific id's or all EBS volumes
+- Cache session to cut on calls
+- 
 
 ## Authors
 
