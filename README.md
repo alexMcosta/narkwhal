@@ -9,16 +9,23 @@ Narkwhal goes through your AWS account using the AWS SDK looking for available E
 ### Requirements
 - Narkwhal makes use of the AWS credentials folder. More information on this at the following link, [AWS Credentials folder](https://docs.aws.amazon.com/sdk-for-go/v1/developer-guide/configuring-sdk.html#creating-the-credentials-file)
 
+- Go. This has been only tested and confirmed to work on 1.11 and never
+
 ### Installing on Mac
 
-Install by doing the following:
+Clone the repo:
 ```
-wget https://github.com/alexMcosta/narkwhal/releases/download/0.1.0/narkwhal
+https://github.com/alexMcosta/narkwhal.git
 ```
 
-Then from the file you installed it you can run
+Then from `github.com/alexMcosta/narkwhal` do
 ```
-./narkwhal -h
+go build
+```
+
+From the same directory you can now enter:
+```
+./narkwhal
 ```
 
 If you see the following then it is working and tells you the commands
