@@ -68,8 +68,8 @@ EXITING: There are no available EBS volumes in the ap-northeast-1 region to remo
 - Add flag for time stamp date
 - Add flag for either choosing specific id's or all EBS volumes
 - Cache session to cut on calls
-- Make binaries for install on multiple platforms so it does not require go
-- 
+- Make binaries to install on multiple platforms so it does not require go
+
 ## Authors
 
 * **Alex Costa** 
