@@ -20,8 +20,8 @@ func createSession(accountFlag string, regionFlag string) *ec2.EC2 {
 	return svc
 }
 
-// GrabAvailableVolumeIDs Uses the AWS SDK to search for all available volumes in the current region
-func GrabAvailableVolumesIDs(accountFlag string, regionFlag string) (volume *ec2.DescribeVolumesOutput) {
+// grabAvailableVolumes Uses the AWS SDK to search for all available volumes in the current region
+func grabAvailableVolumes(accountFlag string, regionFlag string) (volume *ec2.DescribeVolumesOutput) {
 
 	svc := createSession(accountFlag, regionFlag)
 	// Let us filter for all available EBS volumes
@@ -63,7 +63,7 @@ func GrabAvailableVolumesIDs(accountFlag string, regionFlag string) (volume *ec2
 
 // ListVolumeIDs will list the volume IDs that are about to be deleted
 func ListVolumeIDs(accountFlag string, regionFlag string) {
-	input := GrabAvailableVolumesIDs(accountFlag, regionFlag)
+	input := grabAvailableVolumes(accountFlag, regionFlag)
 
 	if input.Volumes == nil {
 		fmt.Println("~~~~~~~~~~~~~~~~~~()~~~~")
@@ -81,7 +81,7 @@ func ListVolumeIDs(accountFlag string, regionFlag string) {
 // RemoveAvailableEBS Removes all avail able EBS volumes based on the current default region
 func RemoveAvailableEBS(accountFlag string, regionFlag string) {
 
-	input := GrabAvailableVolumesIDs(accountFlag, regionFlag)
+	input := grabAvailableVolumes(accountFlag, regionFlag)
 
 	for _, value := range input.Volumes {
 
