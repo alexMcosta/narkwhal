@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/alexmcosta/narkwhal/ingest"
+	"./ingest"
 )
 
 // A looping confirmation function to make sure the user selects yes or no

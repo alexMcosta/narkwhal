@@ -53,7 +53,7 @@ func grabAvailableVolumes(accountFlag string, regionFlag string) (volume *ec2.De
 
 	// If there are no available EBS volumes then quit application
 	if volumes == nil {
-		fmt.Println("GrabAvailableVolumesIDs: There are no available EBS volumes")
+		fmt.Println("grabAvailableVolumes: There are no available EBS volumes")
 		os.Exit(1)
 		return
 	}
