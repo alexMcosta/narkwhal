@@ -60,7 +60,7 @@ EXITING: There are no available EBS volumes in the ap-northeast-1 region to remo
 ---------------------
 ```
 
-### Feature Ideas
+### Feature Roadmap
 - [X] Add flag for choosing which account in `.aws/credentials` folder.
 - [X] Add flag for choosing region
 - Add the ability to scour all regions
@@ -69,6 +69,8 @@ EXITING: There are no available EBS volumes in the ap-northeast-1 region to remo
 - Add flag for either choosing specific id's or all EBS volumes
 - Cache session to cut on calls
 - Make binaries to install on multiple platforms so it does not require go
+- Notifications 
+- Have Narkwhal take a config file and have it run as a cronjob.
 
 ## Authors
 
