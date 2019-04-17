@@ -5,8 +5,6 @@ import (
 	"flag"
 	"fmt"
 	"os"
-
-	"./ingest"
 )
 
 // A looping confirmation function to make sure the user selects yes or no
@@ -34,14 +32,14 @@ func main() {
 
 	//Tell user the volume ID's and confirm deletion
 	fmt.Println("---------------------")
-	ingest.ListVolumeIDs(*accountFlag, *regionFlag)
+	listVolumeIDs(*accountFlag, *regionFlag)
 	fmt.Println("---------------------")
 	fmt.Println("Would you like to remove the above EBS Volumes? (y/n): ")
 
 	// Get confirmation they want the EBS volumes deleted
 	response := confirm()
 	if response == true {
-		ingest.RemoveAvailableEBS(*accountFlag, *regionFlag)
+		removeAvailableEBS(*accountFlag, *regionFlag)
 	} else {
 		fmt.Println("---------\nExiting: Nothing deleted\n---------")
 	}
