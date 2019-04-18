@@ -1,4 +1,4 @@
-package main
+package ingest
 
 import (
 	"fmt"
@@ -62,7 +62,7 @@ func grabAvailableVolumes(accountFlag string, regionFlag string) (volume *ec2.De
 }
 
 // ListVolumeIDs will list the volume IDs that are about to be deleted
-func listVolumeIDs(accountFlag string, regionFlag string) {
+func ListVolumeIDs(accountFlag string, regionFlag string) {
 	input := grabAvailableVolumes(accountFlag, regionFlag)
 
 	if input.Volumes == nil {
@@ -79,7 +79,7 @@ func listVolumeIDs(accountFlag string, regionFlag string) {
 }
 
 // RemoveAvailableEBS Removes all avail able EBS volumes based on the current default region
-func removeAvailableEBS(accountFlag string, regionFlag string) {
+func RemoveAvailableEBS(accountFlag string, regionFlag string) {
 
 	input := grabAvailableVolumes(accountFlag, regionFlag)
 
