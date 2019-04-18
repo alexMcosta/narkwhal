@@ -13,9 +13,9 @@ Narkwhal goes through your AWS account using the AWS SDK looking for available E
 
 ### Installing on Mac
 
-Clone the repo:
+Go get Narkwhal
 ```
-https://github.com/alexMcosta/narkwhal.git
+go get github.com/alexMcosta/narkwhal
 ```
 
 Then from `github.com/alexMcosta/narkwhal` do
@@ -23,7 +23,7 @@ Then from `github.com/alexMcosta/narkwhal` do
 go build
 ```
 
-From the same directory you can now enter:
+Now run Narkwhal!:
 ```
 ./narkwhal
 ```
