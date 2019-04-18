@@ -2,11 +2,11 @@ package main
 
 import (
 	"bufio"
-	"flag"
 	"fmt"
 	"os"
 
 	"github.com/alexmcosta/narkwhal/pkg/ingest"
+	"github.com/alexmcosta/narkwhal/pkg/process"
 )
 
 // A looping confirmation function to make sure the user selects yes or no
@@ -27,10 +27,7 @@ func confirm() bool {
 
 func main() {
 	// Flags
-	accountFlag := flag.String("account", "default", "Lets you select witch AWS account you would like to make changes to")
-	regionFlag := flag.String("region", "us-east-1", "Lets you select which region you would like to run Narkwhal on")
-	flag.Parse()
-	fmt.Printf("account: %s, region: %s\n", *accountFlag, *regionFlag)
+	process.GetFlags()
 
 	//Tell user the volume ID's and confirm deletion
 	fmt.Println("---------------------")
