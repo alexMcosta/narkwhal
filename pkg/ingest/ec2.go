@@ -6,34 +6,23 @@ import (
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
-	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ec2"
 )
 
-// createSession Creates the sessions needed to work with the AWS SDk
-func createSession(accountFlag string, regionFlag string) *ec2.EC2 {
-	sess := session.Must(session.NewSessionWithOptions(session.Options{
-		Config:  aws.Config{Region: aws.String(regionFlag)},
-		Profile: accountFlag,
-	}))
-	svc := ec2.New(sess)
-	return svc
-}
-
-// grabAvailableVolumes Uses the AWS SDK to search for all available volumes in the current region
+// GrabAvailableVolumes Uses the AWS SDK to search for all available volumes in the current region
 func GrabAvailableVolumes(accountFlag string, regionFlag string) (volume *ec2.DescribeVolumesOutput) {
 
 	svc := createSession(accountFlag, regionFlag)
 	// Let us filter for all available EBS volumes
 	input := &ec2.DescribeVolumesInput{
-		// Filters: []*ec2.Filter{
-		// 	{
-		// 		Name: aws.String("status"),
-		// 		Values: []*string{
-		// 			aws.String("in-use"),
-		// 		},
-		// 	},
-		// },
+		Filters: []*ec2.Filter{
+			{
+				Name: aws.String("status"),
+				Values: []*string{
+					aws.String("available"),
+				},
+			},
+		},
 	}
 
 	// Go get them volumes and send an AWS error if there is one
