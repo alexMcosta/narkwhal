@@ -26,14 +26,14 @@ func GrabAvailableVolumes(accountFlag string, regionFlag string) (volume *ec2.De
 	svc := createSession(accountFlag, regionFlag)
 	// Let us filter for all available EBS volumes
 	input := &ec2.DescribeVolumesInput{
-		Filters: []*ec2.Filter{
-			{
-				Name: aws.String("status"),
-				Values: []*string{
-					aws.String("available"),
-				},
-			},
-		},
+		// Filters: []*ec2.Filter{
+		// 	{
+		// 		Name: aws.String("status"),
+		// 		Values: []*string{
+		// 			aws.String("in-use"),
+		// 		},
+		// 	},
+		// },
 	}
 
 	// Go get them volumes and send an AWS error if there is one

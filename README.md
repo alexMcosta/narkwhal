@@ -75,7 +75,7 @@ EXITING: There are no available EBS volumes in the ap-northeast-1 region to remo
 
 #### Major features
 * Add flag to filter based on time
-  * This will be harder then initially thought since AWS does not seem to have a data set to find out when a volume was last added to an EC2 instance. I am assuming using tags will be how I have to go about this.
+  * This will be harder then initially thought since AWS does not seem to have a data set to find out when a volume was last added to an EC2 instance. This being said, I think cloudwatch will be the way to go by possibly using `getMetricData` to ge the end points of `readBytes` and `writeBytes` since if the EBS volume is not being used and it has not been read to or written to in X amount of time then it is probably safe to say it is not needed.
 
 ## Authors
 
