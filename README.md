@@ -61,9 +61,10 @@ EXITING: There are no available EBS volumes in the ap-northeast-1 region to remo
 ```
 
 ### Feature Roadmap
+
+#### Minor features
 - [X] Add flag for choosing which account in `.aws/credentials` folder.
 - [X] Add flag for choosing region
-- Add flag to filter based on time
 - Add the ability to scour all regions
 - Add the ability to scour all accounts
 - Add flag for either choosing specific id's or all EBS volumes
@@ -71,6 +72,10 @@ EXITING: There are no available EBS volumes in the ap-northeast-1 region to remo
 - Make binaries to install on multiple platforms so it does not require go
 - Notifications 
 - Have Narkwhal take a config file and have it run as a cronjob.
+
+#### Major features
+* Add flag to filter based on time
+  * This will be harder then initially thought since AWS does not seem to have a data set to find out when a volume was last added to an EC2 instance. I am assuming using tags will be how I have to go about this.
 
 ## Authors
 

@@ -11,6 +11,8 @@ func main() {
 	// Flags
 	account, region := process.GetFlags()
 
+	fmt.Println(ingest.GrabAvailableVolumes(account, region))
+
 	//Tell user the volume ID's and confirm deletion
 	fmt.Println("---------------------")
 	ingest.ListVolumeIDs(account, region)
