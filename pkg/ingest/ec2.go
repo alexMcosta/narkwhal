@@ -68,7 +68,7 @@ func ListVolumeIDs(accountFlag string, regionFlag string) {
 }
 
 // RemoveAvailableEBS Removes all avail able EBS volumes based on the current default region
-func RemoveAvailableEBS(accountFlag string, regionFlag string) {
+func RemoveAvailableEBSNoTime(accountFlag string, regionFlag string) {
 
 	input := GrabAvailableVolumes(accountFlag, regionFlag)
 
@@ -95,4 +95,32 @@ func RemoveAvailableEBS(accountFlag string, regionFlag string) {
 		fmt.Println("Successfully removed", *value.VolumeId)
 
 	}
+}
+
+func RemoveAvailableEBSYesTime(accountFlag string, regionFlag string, input []string) {
+
+	for _, value := range input {
+
+		svc := createSession(accountFlag, regionFlag)
+
+		deleteInput := &ec2.DeleteVolumeInput{
+			VolumeId: aws.String(value),
+		}
+
+		_, err := svc.DeleteVolume(deleteInput)
+		if err != nil {
+			if aerr, ok := err.(awserr.Error); ok {
+				switch aerr.Code() {
+				default:
+					fmt.Println(aerr.Error())
+				}
+			} else {
+				fmt.Println(err.Error())
+			}
+		}
+
+		fmt.Println("Successfully removed", value)
+
+	}
+
 }
