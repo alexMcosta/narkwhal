@@ -18,7 +18,7 @@ func FilterOldVolumesByTime(accountFlag string, regionFlag string, timeFlag stri
 	duration, _ := time.ParseDuration("-" + timeFlag)
 	startTime := endTime.Add(duration)
 	nameSpace := "AWS/EBS"
-	metricName := "VolumeWriteBytes"
+	metricName := "VolumeReadOps"
 	period := int64(60)
 	stat := "Average"
 	metricDim1Name := "VolumeId"
