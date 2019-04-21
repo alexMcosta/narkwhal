@@ -67,6 +67,8 @@ func ListVolumeIDs(accountFlag string, regionFlag string) {
 	}
 }
 
+// TODO: Refactor: These Remove functions can either be combined or chopped down
+
 // RemoveAvailableEBS Removes all avail able EBS volumes based on the current default region
 func RemoveAvailableEBSNoTime(accountFlag string, regionFlag string) {
 

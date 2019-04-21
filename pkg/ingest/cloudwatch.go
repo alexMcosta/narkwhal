@@ -10,10 +10,12 @@ import (
 	"github.com/aws/aws-sdk-go/service/cloudwatch"
 )
 
+// FilterOldVolumesByTime Uses Cloudwatch to get back any volumes that have not had read ops data report at a specified time.
 func FilterOldVolumesByTime(accountFlag string, regionFlag string, timeFlag string) []string {
+
 	svc := createCloudwatchSession(accountFlag, regionFlag)
 
-	volumeID1 := "thisIsNeeded"
+	volumeID := "thisIsNeeded"
 	endTime := time.Now()
 	duration, _ := time.ParseDuration("-" + timeFlag)
 	startTime := endTime.Add(duration)
@@ -21,7 +23,7 @@ func FilterOldVolumesByTime(accountFlag string, regionFlag string, timeFlag stri
 	metricName := "VolumeReadOps"
 	period := int64(60)
 	stat := "Average"
-	metricDim1Name := "VolumeId"
+	metricDimensionName := "VolumeId"
 	var sliceOfVolumes []string
 
 	availableVolumes := GrabAvailableVolumes(accountFlag, regionFlag)
@@ -29,14 +31,14 @@ func FilterOldVolumesByTime(accountFlag string, regionFlag string, timeFlag stri
 	for _, value := range availableVolumes.Volumes {
 
 		query := &cloudwatch.MetricDataQuery{
-			Id: &volumeID1,
+			Id: &volumeID,
 			MetricStat: &cloudwatch.MetricStat{
 				Metric: &cloudwatch.Metric{
 					Namespace:  &nameSpace,
 					MetricName: &metricName,
 					Dimensions: []*cloudwatch.Dimension{
 						&cloudwatch.Dimension{
-							Name:  &metricDim1Name,
+							Name:  &metricDimensionName,
 							Value: aws.String(*value.VolumeId),
 						},
 					},
@@ -51,13 +53,13 @@ func FilterOldVolumesByTime(accountFlag string, regionFlag string, timeFlag stri
 			StartTime:         &startTime,
 			MetricDataQueries: []*cloudwatch.MetricDataQuery{query},
 		})
-
 		if err != nil {
 			fmt.Println("There Was an error grabbing available volumes in specified time")
 			fmt.Println(err.Error())
 			os.Exit(1)
 		}
 
+		// TODO: Refactor: This feels very wrong
 		for _, metricdata := range resp.MetricDataResults {
 			if metricdata.Timestamps == nil {
 				sliceOfVolumes = append(sliceOfVolumes, *value.VolumeId)
@@ -65,6 +67,8 @@ func FilterOldVolumesByTime(accountFlag string, regionFlag string, timeFlag stri
 		}
 
 	}
+
+	//TODO: Refactor: Repeat from another function
 	if sliceOfVolumes == nil {
 		fmt.Println("~~~~~~~~~~~~~~~~~~()~~~~")
 		fmt.Printf("EXITING: There are no available EBS volumes in the %s region to remove\n", regionFlag)
