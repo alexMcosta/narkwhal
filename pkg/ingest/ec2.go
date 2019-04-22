@@ -50,6 +50,7 @@ func GrabAvailableVolumes(accountFlag string, regionFlag string) (volume *ec2.De
 	return volumes
 }
 
+// RemoveAvailableVolumes Takes a slice of Volume ID's and deletes them
 func RemoveAvailableVolumes(input []string, accountFlag string, regionFlag string) {
 
 	for _, value := range input {

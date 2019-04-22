@@ -20,7 +20,10 @@ func FilterVolumesByTime(sliceOfVolumes []string, accountFlag string, regionFlag
 
 	svc := createCloudwatchSession(accountFlag, regionFlag)
 
-	volumeID := "thisIsNeeded"
+	var filteredSliceOfVolumes []string
+
+	// Define the values for the Metric Data Query
+	volumeID := "thisIsNeededAndUselessForNow"
 	endTime := time.Now()
 	duration, _ := time.ParseDuration("-" + timeFlag)
 	startTime := endTime.Add(duration)
@@ -29,7 +32,6 @@ func FilterVolumesByTime(sliceOfVolumes []string, accountFlag string, regionFlag
 	period := int64(60)
 	stat := "Average"
 	metricDimensionName := "VolumeId"
-	var filteredSliceOfVolumes []string
 
 	for _, value := range sliceOfVolumes {
 
@@ -57,7 +59,7 @@ func FilterVolumesByTime(sliceOfVolumes []string, accountFlag string, regionFlag
 			MetricDataQueries: []*cloudwatch.MetricDataQuery{query},
 		})
 		if err != nil {
-			fmt.Println("There Was an error grabbing available volumes in specified time")
+			fmt.Println("There was an error grabbing available volumes in specified time")
 			fmt.Println(err.Error())
 			os.Exit(1)
 		}
