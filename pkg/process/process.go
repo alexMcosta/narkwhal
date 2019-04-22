@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"github.com/alexmcosta/narkwhal/pkg/ingest"
+	"github.com/aws/aws-sdk-go/service/ec2"
 )
 
 // GetFlags does the work of getting the flags!
@@ -36,32 +37,38 @@ func Confirm() bool {
 	}
 }
 
-func ListVolumesAndConfirm(account string, region string, time string) {
+func GetSliceOfIDs(volume *ec2.DescribeVolumesOutput) []string {
 
-	if time == "0s" {
-		fmt.Println("---------------------")
-		ingest.ListVolumeIDs(account, region)
-		fmt.Println("---------------------")
-		fmt.Println("Would you like to remove the above EBS Volumes? (y/n): ")
-		response := Confirm()
-		if response == true {
-			ingest.RemoveAvailableEBSNoTime(account, region)
-		} else {
-			fmt.Println("---------\nExiting: Nothing deleted\n---------")
-		}
+	var sliceOfIDs []string
+
+	for _, value := range volume.Volumes {
+		sliceOfIDs = append(sliceOfIDs, *value.VolumeId)
+	}
+
+	return sliceOfIDs
+}
+
+func ListVolumesAndConfirm(filteredSliceOfVolumes []string, account string, region string, time string) {
+
+	if filteredSliceOfVolumes == nil {
+		fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
+		fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
+		fmt.Printf("EXITING: There are no available EBS volumes to remove in the %s region of account %s that have been available for at least %s\n", region, account, time)
+		fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
+		fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
+		os.Exit(1)
+	}
+
+	fmt.Println("---------------------")
+	for _, value := range filteredSliceOfVolumes {
+		fmt.Println(value)
+	}
+	fmt.Println("---------------------")
+	fmt.Println("Would you like to remove the above EBS Volumes? (y/n): ")
+	response := Confirm()
+	if response == true {
+		ingest.RemoveAvailableVolumes(filteredSliceOfVolumes, account, region)
 	} else {
-		sliceOfVolumes := ingest.FilterOldVolumesByTime(account, region, time)
-		fmt.Println("---------------------")
-		for _, value := range sliceOfVolumes {
-			fmt.Println(value)
-		}
-		fmt.Println("---------------------")
-		fmt.Println("Would you like to remove the above EBS Volumes? (y/n): ")
-		response := Confirm()
-		if response == true {
-			ingest.RemoveAvailableEBSYesTime(account, region, sliceOfVolumes)
-		} else {
-			fmt.Println("---------\nExiting: Nothing deleted\n---------")
-		}
+		fmt.Println("---------\nExiting: Nothing deleted\n---------")
 	}
 }

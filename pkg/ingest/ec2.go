@@ -9,7 +9,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/ec2"
 )
 
-// GrabAvailableVolumes Uses the AWS SDK to search for all available volumes in the current region
+// GrabAvailableVolumes Uses the AWS SDK to search for all available volumes in the specified region
 func GrabAvailableVolumes(accountFlag string, regionFlag string) (volume *ec2.DescribeVolumesOutput) {
 
 	svc := createSession(accountFlag, regionFlag)
@@ -50,56 +50,7 @@ func GrabAvailableVolumes(accountFlag string, regionFlag string) (volume *ec2.De
 	return volumes
 }
 
-// ListVolumeIDs will list the volume IDs that are about to be deleted
-func ListVolumeIDs(accountFlag string, regionFlag string) {
-	input := GrabAvailableVolumes(accountFlag, regionFlag)
-
-	if input.Volumes == nil {
-		fmt.Println("~~~~~~~~~~~~~~~~~~()~~~~")
-		fmt.Printf("EXITING: There are no available EBS volumes in the %s region to remove\n", regionFlag)
-		fmt.Println("~~~~~~~~~~~~~~~~~~()~~~~")
-		fmt.Println("---------------------")
-		os.Exit(1)
-	} else {
-		for _, value := range input.Volumes {
-			fmt.Println(*value.VolumeId)
-		}
-	}
-}
-
-// TODO: Refactor: These Remove functions can either be combined or chopped down
-
-// RemoveAvailableEBS Removes all avail able EBS volumes based on the current default region
-func RemoveAvailableEBSNoTime(accountFlag string, regionFlag string) {
-
-	input := GrabAvailableVolumes(accountFlag, regionFlag)
-
-	for _, value := range input.Volumes {
-
-		svc := createSession(accountFlag, regionFlag)
-
-		deleteInput := &ec2.DeleteVolumeInput{
-			VolumeId: aws.String(*value.VolumeId),
-		}
-
-		_, err := svc.DeleteVolume(deleteInput)
-		if err != nil {
-			if aerr, ok := err.(awserr.Error); ok {
-				switch aerr.Code() {
-				default:
-					fmt.Println(aerr.Error())
-				}
-			} else {
-				fmt.Println(err.Error())
-			}
-		}
-
-		fmt.Println("Successfully removed", *value.VolumeId)
-
-	}
-}
-
-func RemoveAvailableEBSYesTime(accountFlag string, regionFlag string, input []string) {
+func RemoveAvailableVolumes(input []string, accountFlag string, regionFlag string) {
 
 	for _, value := range input {
 

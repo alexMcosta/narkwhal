@@ -10,8 +10,13 @@ import (
 	"github.com/aws/aws-sdk-go/service/cloudwatch"
 )
 
-// FilterOldVolumesByTime Uses Cloudwatch to get back any volumes that have not had read ops data report at a specified time.
-func FilterOldVolumesByTime(accountFlag string, regionFlag string, timeFlag string) []string {
+// FilterVolumesByTime Uses Cloudwatch to get back any volumes that have not had read ops data report at a specified time.
+func FilterVolumesByTime(sliceOfVolumes []string, accountFlag string, regionFlag string, timeFlag string) []string {
+
+	// If the time value given is 0s we can just leave here with the ID's passed through
+	if timeFlag == "0s" {
+		return sliceOfVolumes
+	}
 
 	svc := createCloudwatchSession(accountFlag, regionFlag)
 
@@ -24,11 +29,9 @@ func FilterOldVolumesByTime(accountFlag string, regionFlag string, timeFlag stri
 	period := int64(60)
 	stat := "Average"
 	metricDimensionName := "VolumeId"
-	var sliceOfVolumes []string
+	var filteredSliceOfVolumes []string
 
-	availableVolumes := GrabAvailableVolumes(accountFlag, regionFlag)
-
-	for _, value := range availableVolumes.Volumes {
+	for _, value := range sliceOfVolumes {
 
 		query := &cloudwatch.MetricDataQuery{
 			Id: &volumeID,
@@ -39,7 +42,7 @@ func FilterOldVolumesByTime(accountFlag string, regionFlag string, timeFlag stri
 					Dimensions: []*cloudwatch.Dimension{
 						&cloudwatch.Dimension{
 							Name:  &metricDimensionName,
-							Value: aws.String(*value.VolumeId),
+							Value: aws.String(value),
 						},
 					},
 				},
@@ -62,19 +65,10 @@ func FilterOldVolumesByTime(accountFlag string, regionFlag string, timeFlag stri
 		// TODO: Refactor: This feels very wrong
 		for _, metricdata := range resp.MetricDataResults {
 			if metricdata.Timestamps == nil {
-				sliceOfVolumes = append(sliceOfVolumes, *value.VolumeId)
+				filteredSliceOfVolumes = append(filteredSliceOfVolumes, value)
 			}
 		}
 
 	}
-
-	//TODO: Refactor: Repeat from another function
-	if sliceOfVolumes == nil {
-		fmt.Println("~~~~~~~~~~~~~~~~~~()~~~~")
-		fmt.Printf("EXITING: There are no available EBS volumes in the %s region to remove\n", regionFlag)
-		fmt.Println("~~~~~~~~~~~~~~~~~~()~~~~")
-		fmt.Println("---------------------")
-		os.Exit(1)
-	}
-	return sliceOfVolumes
+	return filteredSliceOfVolumes
 }
