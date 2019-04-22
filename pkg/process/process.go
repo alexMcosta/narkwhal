@@ -21,8 +21,8 @@ func GetFlags() (string, string, string) {
 	return *accountFlag, *regionFlag, *timeFlag
 }
 
-// Confirm makes sure that the user either gives a yes or no answer
-func Confirm() bool {
+// confirm makes sure that the user either gives a yes or no answer
+func confirm() bool {
 	reader := bufio.NewReader(os.Stdin)
 	text, _, _ := reader.ReadRune()
 
@@ -33,10 +33,11 @@ func Confirm() bool {
 		return false
 	default:
 		fmt.Println("Please type y or n and then press enter: ")
-		return Confirm()
+		return confirm()
 	}
 }
 
+// GetSliceOfIDs takes the struct of EBS volume data and retuens a slice of only the ID's
 func GetSliceOfIDs(volume *ec2.DescribeVolumesOutput) []string {
 
 	var sliceOfIDs []string
@@ -48,6 +49,7 @@ func GetSliceOfIDs(volume *ec2.DescribeVolumesOutput) []string {
 	return sliceOfIDs
 }
 
+// ListVolumesAndConfirm takes a list of VolumeID's and confirms if the user wants them removed
 func ListVolumesAndConfirm(filteredSliceOfVolumes []string, account string, region string, time string) {
 
 	if filteredSliceOfVolumes == nil {
@@ -65,10 +67,14 @@ func ListVolumesAndConfirm(filteredSliceOfVolumes []string, account string, regi
 	}
 	fmt.Println("---------------------")
 	fmt.Println("Would you like to remove the above EBS Volumes? (y/n): ")
-	response := Confirm()
+	response := confirm()
 	if response == true {
 		ingest.RemoveAvailableVolumes(filteredSliceOfVolumes, account, region)
 	} else {
-		fmt.Println("---------\nExiting: Nothing deleted\n---------")
+		fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
+		fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
+		fmt.Println("EXITING: Nothing Deleted")
+		fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
+		fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
 	}
 }
