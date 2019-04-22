@@ -13,7 +13,7 @@ import (
 func GetFlags() (string, string, string) {
 	accountFlag := flag.String("account", "default", "Lets you select witch AWS account you would like to make changes to")
 	regionFlag := flag.String("region", "us-east-1", "Lets you select which region you would like to run Narkwhal on")
-	timeFlag := flag.String("time", "0s", "Lets you select the amount of time since the last time a volume was used by miliseconds, seconds, or hours. Example: 3h15m20ms would return all available volumes that were not used within the last 3 hours 15 minutes and 20 seconds")
+	timeFlag := flag.String("time", "0s", "Lets you select the amount of time a volume has been available based on MS, seconds, and Hours")
 	flag.Parse()
 
 	fmt.Printf("account: %s, region: %s, Not used within: %s\n", *accountFlag, *regionFlag, *timeFlag)

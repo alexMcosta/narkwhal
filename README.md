@@ -20,26 +20,29 @@ go get github.com/alexMcosta/narkwhal
 
 Then from `github.com/alexMcosta/narkwhal` do
 ```
-go build
+$ go build
+$ go install
 ```
 
 Now run Narkwhal!:
 ```
-./narkwhal
+narkwhal -h
 ```
 
 If you see the following then it is working and tells you the commands
-```
-Usage of ./narkwhal:
+```         
+Usage of narkwhal:
   -account string
-    	Lets you select witch AWS account you would like to make changes to (default "default")
+        Lets you select witch AWS account you would like to make changes to (default "default")
   -region string
-    	Lets you select which region you would like to run Narkwhal on (default "us-east-1")
+        Lets you select which region you would like to run Narkwhal on (default "us-east-1")
+  -time string
+        Lets you select the amount of time a volume has been available based on MS, seconds, and Hours (default "0s")
 ```
 
 Example of EBS volumes found and successful removal:
 ```
-$ ./narkwhal -region ap-northeast-1                                                                          2 ↵
+$ ./narkwhal -region ap-northeast-1                                                          
 account: default, region: ap-northeast-1
 ---------------------
 vol-0466fbaa999d132a6
@@ -60,6 +63,27 @@ EXITING: There are no available EBS volumes in the ap-northeast-1 region to remo
 ---------------------
 ```
 
+### More about the flags
+
+#### -account
+The account flag takes the account name between the square brackets from the `.aws/credentials` file. For example, to get the following: 
+
+```
+[Narkwhal]
+aws_access_key_id = IAMSUCHAVERYCOOLACCESSKEY
+aws_secret_access_key = 53cRE74CcEs5M30Wc47
+```
+
+The above credentials would be used if you passed `Narkwhal` through the account flag.
+
+#### -region
+The region flag lets you specify the region to use in that standard format like `us-west-1`. The default is `us-east-1`.
+
+#### -time
+The time flag uses Cloudwatch to check if there was any activity from the EBS volumes since the time specified. It does this by checking the `Read Ops` metric.
+
+The time is based off of the Go function time.Duration.
+
 ### Feature Roadmap
 
 #### Minor features
@@ -69,13 +93,12 @@ EXITING: There are no available EBS volumes in the ap-northeast-1 region to remo
 - Add the ability to scour all accounts
 - Add flag for either choosing specific id's or all EBS volumes
 - Cache session to cut on calls
-- Make binaries to install on multiple platforms so it does not require go
-- Notifications 
 - Have Narkwhal take a config file and have it run as a cronjob.
 
 #### Major features
-* Add flag to filter based on time
-  * This will be harder then initially thought since AWS does not seem to have a data set to find out when a volume was last added to an EC2 instance. This being said, I think cloudwatch will be the way to go by possibly using `getMetricData` to ge the end points of `readBytes` and `writeBytes` since if the EBS volume is not being used and it has not been read to or written to in X amount of time then it is probably safe to say it is not needed.
+- [X] Add flag to filter based on time
+- Make binaries to install on multiple platforms so it does not require go
+- Notifications 
 
 ## Authors
 
