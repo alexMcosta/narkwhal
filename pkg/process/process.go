@@ -55,7 +55,7 @@ func ListVolumesAndConfirm(filteredSliceOfVolumes []string, account string, regi
 	if filteredSliceOfVolumes == nil {
 		fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
 		fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
-		fmt.Printf("EXITING: There are no available EBS volumes to remove in the %s region of account %s that have been available for at least %s\n", region, account, time)
+		fmt.Printf("EXITING: There are no available EBS volumes to remove in the %s region of account %s that have been non-active for at least %s\n", region, account, time)
 		fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
 		fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
 		os.Exit(1)

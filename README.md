@@ -51,20 +51,13 @@ y
 Successfully removed vol-0e4a10ca6d4e1fb09
 ```
 
-Example of no available EBS volumes in the region:
+Example of no available EBS volumes that meet the flags:
 ```
 $ narkwhal -time 3h
 account: default, region: us-east-1, Not used within: 3h
----------------------
-vol-0e4a10ca6d4e1fb09
-vol-092574f3b38c35159
----------------------
-Would you like to remove the above EBS Volumes? (y/n): 
-n
 ~~~~~~~~~~~~~~~~~~~~~~
 ~~~~~~~~~~~~~~~~~~~~~~
-EXITING: Nothing Deleted
-~~~~~~~~~~~~~~~~~~~~~~
+EXITING: There are no available EBS volumes to remove in the us-east-1 region of account default that have been non-active for at least 3h
 ~~~~~~~~~~~~~~~~~~~~~~
 ```
 
