@@ -8,7 +8,7 @@ import (
 )
 
 // createSession Creates the sessions needed to work with the AWS SDk
-func createSession(accountFlag string, regionFlag string) *ec2.EC2 {
+func createEC2Session(accountFlag string, regionFlag string) *ec2.EC2 {
 	sess := session.Must(session.NewSessionWithOptions(session.Options{
 		Config:  aws.Config{Region: aws.String(regionFlag)},
 		Profile: accountFlag,

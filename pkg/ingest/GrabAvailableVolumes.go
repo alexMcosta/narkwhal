@@ -12,7 +12,7 @@ import (
 // GrabAvailableVolumes Uses the AWS SDK to search for all available volumes in the specified region
 func GrabAvailableVolumes(accountFlag string, regionFlag string) (volume *ec2.DescribeVolumesOutput) {
 
-	svc := createSession(accountFlag, regionFlag)
+	svc := createEC2Session(accountFlag, regionFlag)
 	// Let us filter for all available EBS volumes
 	input := &ec2.DescribeVolumesInput{
 		Filters: []*ec2.Filter{
@@ -48,33 +48,4 @@ func GrabAvailableVolumes(accountFlag string, regionFlag string) (volume *ec2.De
 	}
 
 	return volumes
-}
-
-// RemoveAvailableVolumes Takes a slice of Volume ID's and deletes them
-func RemoveAvailableVolumes(input []string, accountFlag string, regionFlag string) {
-
-	for _, value := range input {
-
-		svc := createSession(accountFlag, regionFlag)
-
-		deleteInput := &ec2.DeleteVolumeInput{
-			VolumeId: aws.String(value),
-		}
-
-		_, err := svc.DeleteVolume(deleteInput)
-		if err != nil {
-			if aerr, ok := err.(awserr.Error); ok {
-				switch aerr.Code() {
-				default:
-					fmt.Println(aerr.Error())
-				}
-			} else {
-				fmt.Println(err.Error())
-			}
-		}
-
-		fmt.Println("Successfully removed", value)
-
-	}
-
 }
