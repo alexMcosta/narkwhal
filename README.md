@@ -20,7 +20,6 @@ go get github.com/alexMcosta/narkwhal
 
 Then from `github.com/alexMcosta/narkwhal` do
 ```
-$ go build
 $ go install
 ```
 
@@ -42,25 +41,31 @@ Usage of narkwhal:
 
 Example of EBS volumes found and successful removal:
 ```
-$ ./narkwhal -region ap-northeast-1                                                          
-account: default, region: ap-northeast-1
+$ narkwhal -account default -region ap-northeast-1 -time 24h                                                          
+account: default, region: us-east-1, Not used within: 24h
 ---------------------
-vol-0466fbaa999d132a6
+vol-0e4a10ca6d4e1fb09
 ---------------------
-Would you like to remove the above EBS Volumes? (y/n):
+Would you like to remove the above EBS Volumes? (y/n): 
 y
-Successfully removed vol-0466fbaa999d132a6
+Successfully removed vol-0e4a10ca6d4e1fb09
 ```
 
 Example of no available EBS volumes in the region:
 ```
-$ ./narkwhal -region ap-northeast-1
-account: default, region: ap-northeast-1
+$ narkwhal -time 3h
+account: default, region: us-east-1, Not used within: 3h
 ---------------------
-~~~~~~~~~~~~~~~~()~~~~~~
-EXITING: There are no available EBS volumes in the ap-northeast-1 region to remove
-~~~~~~~~~~~~~~~~()~~~~~~
+vol-0e4a10ca6d4e1fb09
+vol-092574f3b38c35159
 ---------------------
+Would you like to remove the above EBS Volumes? (y/n): 
+n
+~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
+EXITING: Nothing Deleted
+~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
 ```
 
 ### More about the flags
@@ -80,9 +85,12 @@ The above credentials would be used if you passed `Narkwhal` through the account
 The region flag lets you specify the region to use in that standard format like `us-west-1`. The default is `us-east-1`.
 
 #### -time
-The time flag uses Cloudwatch to check if there was any activity from the EBS volumes since the time specified. It does this by checking the `Read Ops` metric.
+The time flag uses Cloudwatch to check if there was any activity from the EBS volumes since the time specified and it does this by checking the `Read Ops` metric. 
+Time does not check for the last time the volume was attached but rather the last time the volume showed any kind of read activity. That being said, the volume 
+could have been attached to an EC2 instance that was then stopped for a month. If that EC2 instance was then terminated, without being activated again, the volume 
+would be up for deletion if a time flag of `48h` was passed since it would then be available and also show no signs of activity for longer then 48 hours.
 
-The time is based off of the Go function time.Duration.
+The input is based off of the Go function `time.Duration()`.
 
 ### Feature Roadmap
 
