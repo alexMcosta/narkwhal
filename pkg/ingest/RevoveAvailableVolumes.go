@@ -9,29 +9,31 @@ import (
 )
 
 // RemoveAvailableVolumes Takes a slice of Volume ID's and deletes them
-func RemoveAvailableVolumes(input []string, accountFlag string, regionFlag string) {
+func RemoveAvailableVolumes(accountFlag string, regionsData map[string][]string) {
 
-	for _, value := range input {
+	for region, volID := range regionsData {
 
-		svc := createEC2Session(accountFlag, regionFlag)
+		svc := createEC2Session(accountFlag, region)
 
-		deleteInput := &ec2.DeleteVolumeInput{
-			VolumeId: aws.String(value),
-		}
+		for _, volumeID := range volID {
 
-		_, err := svc.DeleteVolume(deleteInput)
-		if err != nil {
-			if aerr, ok := err.(awserr.Error); ok {
-				switch aerr.Code() {
-				default:
-					fmt.Println(aerr.Error())
-				}
-			} else {
-				fmt.Println(err.Error())
+			deleteInput := &ec2.DeleteVolumeInput{
+				VolumeId: aws.String(volumeID),
 			}
-		}
 
-		fmt.Println("Successfully removed", value)
+			_, err := svc.DeleteVolume(deleteInput)
+			if err != nil {
+				if aerr, ok := err.(awserr.Error); ok {
+					switch aerr.Code() {
+					default:
+						fmt.Println(aerr.Error())
+					}
+				} else {
+					fmt.Println(err.Error())
+				}
+			}
+			fmt.Printf("Successfully removed %s", volumeID)
+		}
 
 	}
 

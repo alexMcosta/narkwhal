@@ -2,23 +2,25 @@ package process
 
 import (
 	"bufio"
-	"flag"
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/alexmcosta/narkwhal/pkg/ingest"
-	"github.com/aws/aws-sdk-go/service/ec2"
 )
 
-// GetFlags does the work of getting the flags!
-func GetFlags() (string, string, string) {
-	accountFlag := flag.String("account", "default", "Lets you select witch AWS account you would like to make changes to")
-	regionFlag := flag.String("region", "us-east-1", "Lets you select which region you would like to run Narkwhal on")
-	timeFlag := flag.String("time", "0s", "Lets you select the amount of time a volume has been available based on MS, seconds, and Hours")
-	flag.Parse()
+func MultiRegion(regions string) []string {
+	var sliceOfRegions []string
 
-	fmt.Printf("account: %s, region: %s, Not used within: %s\n", *accountFlag, *regionFlag, *timeFlag)
-	return *accountFlag, *regionFlag, *timeFlag
+	if strings.Contains(regions, ",") {
+		sliceOfRegions := strings.Split(regions, ",")
+		return sliceOfRegions
+	} else {
+		sliceOfRegions = append(sliceOfRegions, regions)
+	}
+
+	return sliceOfRegions
+
 }
 
 // confirm makes sure that the user either gives a yes or no answer
@@ -37,44 +39,65 @@ func confirm() bool {
 	}
 }
 
-// GetSliceOfIDs takes the struct of EBS volume data and retuens a slice of only the ID's
-func GetSliceOfIDs(volume *ec2.DescribeVolumesOutput) []string {
-
-	var sliceOfIDs []string
-
-	for _, value := range volume.Volumes {
-		sliceOfIDs = append(sliceOfIDs, *value.VolumeId)
-	}
-
-	return sliceOfIDs
-}
-
 // ListVolumesAndConfirm takes a list of VolumeID's and confirms if the user wants them removed
-func ListVolumesAndConfirm(filteredSliceOfVolumes []string, account string, region string, time string) {
+func ListVolumesAndConfirm(filteredSliceOfVolumes map[string][]string, account string, time string) {
 
-	if filteredSliceOfVolumes == nil {
-		fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
-		fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
-		fmt.Printf("EXITING: There are no available EBS volumes to remove in the %s region of account %s that have been non-active for at least %s\n", region, account, time)
-		fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
-		fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
-		os.Exit(1)
-	}
+	for region, sliceOfIDs := range filteredSliceOfVolumes {
 
-	fmt.Println("---------------------")
-	for _, value := range filteredSliceOfVolumes {
-		fmt.Println(value)
+		if sliceOfIDs == nil {
+			fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
+			fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
+			fmt.Printf("No Available Volumes in %s\n", region)
+			fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
+			fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
+		} else {
+			fmt.Println("~~~~~~~~~~~")
+			fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
+			fmt.Println(region)
+			fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
+			fmt.Println("~~~~~~~~~~~")
+
+			for _, volumeID := range sliceOfIDs {
+				fmt.Println(volumeID)
+			}
+			fmt.Println("---------------------")
+			fmt.Println("Would you like to remove the above EBS Volumes? (y/n): ")
+			response := confirm()
+			if response == true {
+				ingest.RemoveAvailableVolumes(account, filteredSliceOfVolumes)
+			} else {
+				fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
+				fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
+				fmt.Println("EXITING: Nothing Deleted")
+				fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
+				fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
+			}
+		}
+
 	}
-	fmt.Println("---------------------")
-	fmt.Println("Would you like to remove the above EBS Volumes? (y/n): ")
-	response := confirm()
-	if response == true {
-		ingest.RemoveAvailableVolumes(filteredSliceOfVolumes, account, region)
-	} else {
-		fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
-		fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
-		fmt.Println("EXITING: Nothing Deleted")
-		fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
-		fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
-	}
+	// if filteredSliceOfVolumes == nil {
+	// 	fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
+	// 	fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
+	// 	fmt.Printf("EXITING: There are no available EBS volumes to remove with the specified fields")
+	// 	fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
+	// 	fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
+	// 	os.Exit(1)
+	// }
+
+	// fmt.Println("---------------------")
+	// for _, value := range filteredSliceOfVolumes {
+	// 	fmt.Println(value)
+	// }
+	// fmt.Println("---------------------")
+	// fmt.Println("Would you like to remove the above EBS Volumes? (y/n): ")
+	// response := confirm()
+	// if response == true {
+	// 	ingest.RemoveAvailableVolumes(filteredSliceOfVolumes, account, regions)
+	// } else {
+	// 	fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
+	// 	fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
+	// 	fmt.Println("EXITING: Nothing Deleted")
+	// 	fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
+	// 	fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
+	// }
 }

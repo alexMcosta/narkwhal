@@ -10,42 +10,63 @@ import (
 )
 
 // GrabAvailableVolumes Uses the AWS SDK to search for all available volumes in the specified region
-func GrabAvailableVolumes(accountFlag string, regionFlag string) (volume *ec2.DescribeVolumesOutput) {
+func GrabAvailableVolumes(accountFlag string, regions []string) map[string][]string {
 
-	svc := createEC2Session(accountFlag, regionFlag)
-	// Let us filter for all available EBS volumes
-	input := &ec2.DescribeVolumesInput{
-		Filters: []*ec2.Filter{
-			{
-				Name: aws.String("status"),
-				Values: []*string{
-					aws.String("available"),
+	mapOfRegions := make(map[string][]string)
+	// var sliceOfIds []string
+
+	for _, region := range regions {
+
+		svc := createEC2Session(accountFlag, region)
+
+		// Let us filter for all available EBS volumes
+		input := &ec2.DescribeVolumesInput{
+			Filters: []*ec2.Filter{
+				{
+					Name: aws.String("status"),
+					Values: []*string{
+						aws.String("available"),
+					},
 				},
 			},
-		},
-	}
-
-	// Go get them volumes and send an AWS error if there is one
-	volumes, err := svc.DescribeVolumes(input)
-	if err != nil {
-		if aerr, ok := err.(awserr.Error); ok {
-			switch aerr.Code() {
-			default:
-				fmt.Println(aerr.Error())
-				os.Exit(1)
-			}
-		} else {
-			fmt.Println(err.Error())
 		}
-		return
+
+		// Go get them volumes and send an AWS error if there is one
+		volumes, err := svc.DescribeVolumes(input)
+		if err != nil {
+			if aerr, ok := err.(awserr.Error); ok {
+				switch aerr.Code() {
+				default:
+					fmt.Println(aerr.Error())
+					os.Exit(1)
+				}
+			} else {
+				fmt.Println(err.Error())
+			}
+		}
+
+		mapOfRegions[region] = getSliceOfIDs(volumes)
+
 	}
 
 	// If there are no available EBS volumes then quit application
-	if volumes == nil {
-		fmt.Println("grabAvailableVolumes: There are no available EBS volumes")
-		os.Exit(1)
-		return
+	// if sliceOfRegions == nil {
+	// 	fmt.Println("grabAvailableVolumes: There are no available EBS volumes")
+	// 	os.Exit(1)
+	// 	return
+	// }
+
+	return mapOfRegions
+}
+
+// GetSliceOfIDs takes the struct of EBS volume data and retuens a slice of only the ID's
+func getSliceOfIDs(volume *ec2.DescribeVolumesOutput) []string {
+
+	var sliceOfIDs []string
+
+	for _, value := range volume.Volumes {
+		sliceOfIDs = append(sliceOfIDs, *value.VolumeId)
 	}
 
-	return volumes
+	return sliceOfIDs
 }

@@ -88,16 +88,14 @@ The input is based off of the Go function `time.Duration()`.
 ### Feature Roadmap
 
 #### Minor features
-- [X] Add flag for choosing which account in `.aws/credentials` folder.
-- [X] Add flag for choosing region
-- Add the ability to scour all regions
-- Add the ability to scour all accounts
+- Add the ability to scour some or all regions
+- Add the ability to scour some or all accounts
 - Add flag for either choosing specific id's or all EBS volumes
 - Cache session to cut on calls
 - Have Narkwhal take a config file and have it run as a cronjob.
+- Silent mode
 
 #### Major features
-- [X] Add flag to filter based on time
 - Make binaries to install on multiple platforms so it does not require go
 - Notifications 
 

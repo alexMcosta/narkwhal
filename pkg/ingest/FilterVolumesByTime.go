@@ -11,16 +11,12 @@ import (
 )
 
 // FilterVolumesByTime Uses Cloudwatch to get back any volumes that have not had read ops data report at a specified time.
-func FilterVolumesByTime(sliceOfVolumes []string, accountFlag string, regionFlag string, timeFlag string) []string {
+func FilterVolumesByTime(regionData map[string][]string, accountFlag string, timeFlag string) map[string][]string {
 
 	// If the time value given is 0s we can just leave here with the ID's passed through
 	if timeFlag == "0s" {
-		return sliceOfVolumes
+		return regionData
 	}
-
-	svc := createCloudwatchSession(accountFlag, regionFlag)
-
-	var filteredSliceOfVolumes []string
 
 	// Define the values for the Metric Data Query
 	volumeID := "thisIsNeededAndUselessForNow"
@@ -33,44 +29,52 @@ func FilterVolumesByTime(sliceOfVolumes []string, accountFlag string, regionFlag
 	stat := "Average"
 	metricDimensionName := "VolumeId"
 
-	for _, value := range sliceOfVolumes {
+	for region, sliceOfIDs := range regionData {
+		svc := createCloudwatchSession(accountFlag, region)
 
-		query := &cloudwatch.MetricDataQuery{
-			Id: &volumeID,
-			MetricStat: &cloudwatch.MetricStat{
-				Metric: &cloudwatch.Metric{
-					Namespace:  &nameSpace,
-					MetricName: &metricName,
-					Dimensions: []*cloudwatch.Dimension{
-						&cloudwatch.Dimension{
-							Name:  &metricDimensionName,
-							Value: aws.String(value),
+		var filteredSliceOfVolumes []string
+
+		for _, volID := range sliceOfIDs {
+
+			query := &cloudwatch.MetricDataQuery{
+				Id: &volumeID,
+				MetricStat: &cloudwatch.MetricStat{
+					Metric: &cloudwatch.Metric{
+						Namespace:  &nameSpace,
+						MetricName: &metricName,
+						Dimensions: []*cloudwatch.Dimension{
+							&cloudwatch.Dimension{
+								Name:  &metricDimensionName,
+								Value: aws.String(volID),
+							},
 						},
 					},
+					Period: &period,
+					Stat:   &stat,
 				},
-				Period: &period,
-				Stat:   &stat,
-			},
-		}
-
-		resp, err := svc.GetMetricData(&cloudwatch.GetMetricDataInput{
-			EndTime:           &endTime,
-			StartTime:         &startTime,
-			MetricDataQueries: []*cloudwatch.MetricDataQuery{query},
-		})
-		if err != nil {
-			fmt.Println("There was an error grabbing available volumes in specified time")
-			fmt.Println(err.Error())
-			os.Exit(1)
-		}
-
-		// TODO: Refactor: This feels very wrong
-		for _, metricdata := range resp.MetricDataResults {
-			if metricdata.Timestamps == nil {
-				filteredSliceOfVolumes = append(filteredSliceOfVolumes, value)
 			}
-		}
 
+			resp, err := svc.GetMetricData(&cloudwatch.GetMetricDataInput{
+				EndTime:           &endTime,
+				StartTime:         &startTime,
+				MetricDataQueries: []*cloudwatch.MetricDataQuery{query},
+			})
+			if err != nil {
+				fmt.Println("There was an error grabbing available volumes in specified time")
+				fmt.Println(err.Error())
+				os.Exit(1)
+			}
+
+			// TODO: Refactor: This feels very wrong
+			for _, metricdata := range resp.MetricDataResults {
+				if metricdata.Timestamps == nil {
+					filteredSliceOfVolumes = append(filteredSliceOfVolumes, volID)
+				}
+			}
+
+			regionData[region] = filteredSliceOfVolumes
+
+		}
 	}
-	return filteredSliceOfVolumes
+	return regionData
 }
