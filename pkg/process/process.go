@@ -9,6 +9,7 @@ import (
 	"github.com/alexmcosta/narkwhal/pkg/ingest"
 )
 
+// MultiRegion will sort through comma seperated regions and make a slice of strings
 func MultiRegion(regions string) []string {
 	var sliceOfRegions []string
 
@@ -47,17 +48,13 @@ func ListVolumesAndConfirm(filteredSliceOfVolumes map[string][]string, account s
 	for region, sliceOfIDs := range filteredSliceOfVolumes {
 
 		if sliceOfIDs == nil {
-			//fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
 			fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
 			fmt.Printf("No Available Volumes in %s\n", region)
 			fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
-			//fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
 		} else {
-			//fmt.Println("~~~~~~~~~~~")
 			fmt.Println("~~~~~~~~~~~")
 			fmt.Println(region)
 			fmt.Println("~~~~~~~~~~~")
-			//fmt.Println("~~~~~~~~~~~")
 
 			for _, volumeID := range sliceOfIDs {
 				fmt.Println(volumeID)
@@ -73,29 +70,4 @@ func ListVolumesAndConfirm(filteredSliceOfVolumes map[string][]string, account s
 	if removableVolumes != nil {
 		ingest.RemoveAvailableVolumes(account, removableVolumes)
 	}
-	// if filteredSliceOfVolumes == nil {
-	// 	fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
-	// 	fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
-	// 	fmt.Printf("EXITING: There are no available EBS volumes to remove with the specified fields")
-	// 	fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
-	// 	fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
-	// 	os.Exit(1)
-	// }
-
-	// fmt.Println("---------------------")
-	// for _, value := range filteredSliceOfVolumes {
-	// 	fmt.Println(value)
-	// }
-	// fmt.Println("---------------------")
-	// fmt.Println("Would you like to remove the above EBS Volumes? (y/n): ")
-	// response := confirm()
-	// if response == true {
-	// 	ingest.RemoveAvailableVolumes(filteredSliceOfVolumes, account, regions)
-	// } else {
-	// 	fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
-	// 	fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
-	// 	fmt.Println("EXITING: Nothing Deleted")
-	// 	fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
-	// 	fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
-	// }
 }
