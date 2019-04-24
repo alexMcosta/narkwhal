@@ -74,8 +74,8 @@ aws_secret_access_key = 53cRE74CcEs5M30Wc47
 
 The above credentials would be used if you passed `Narkwhal` through the account flag.
 
-#### -region
-The region flag lets you specify the region to use in that standard format like `us-west-1`. The default is `us-east-1`.
+#### -regions
+The region flag lets you specify the region to use in that standard format like `us-west-1`. The default is `us-east-1`. It also allows you to select multiple regions by comma separation like so `-regions us-west-1,us-east-2`
 
 #### -time
 The time flag uses Cloudwatch to check if there was any activity from the EBS volumes since the time specified and it does this by checking the `Read Ops` metric. 
