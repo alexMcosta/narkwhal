@@ -79,18 +79,21 @@ The `-regions` flag has multiple possible in puts for example:
 
 - One Region
       - You will place the common format of that region such as `us-west-1` The default if the region flag is not used will be `us-east-1`.
+      
       - EXAMPLE: `narkwhal -regions us-west-2`
 
 - Multiple Regions
       - You can place multiple chosen regions separated by a comma.
-      - EXAMPLE: `narkwhal -regions us-west-1,us-east-2,	eu-central-1`
+      
+      EXAMPLE: `narkwhal -regions us-west-1,us-east-2,	eu-central-1`
 
 - All Regions
-      - To select all available regions just pass the value `ALL`
-      - EXAMPLE: `narkwhal -regions ALL`
-      - List of regions scoured with the `ALL` value are as follows:
-
+      * To select all available regions just pass the value `ALL`
       
+      * EXAMPLE: `narkwhal -regions ALL`
+      
+      * List of regions scoured with the `ALL` value are as follows:
+
       - us-east-1
 	- us-east-2
 	- us-west-1
