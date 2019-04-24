@@ -13,7 +13,6 @@ import (
 func GrabAvailableVolumes(accountFlag string, regions []string) map[string][]string {
 
 	mapOfRegions := make(map[string][]string)
-	// var sliceOfIds []string
 
 	for _, region := range regions {
 
@@ -48,13 +47,6 @@ func GrabAvailableVolumes(accountFlag string, regions []string) map[string][]str
 		mapOfRegions[region] = getSliceOfIDs(volumes)
 
 	}
-
-	// If there are no available EBS volumes then quit application
-	// if sliceOfRegions == nil {
-	// 	fmt.Println("grabAvailableVolumes: There are no available EBS volumes")
-	// 	os.Exit(1)
-	// 	return
-	// }
 
 	return mapOfRegions
 }

@@ -42,20 +42,22 @@ func confirm() bool {
 // ListVolumesAndConfirm takes a list of VolumeID's and confirms if the user wants them removed
 func ListVolumesAndConfirm(filteredSliceOfVolumes map[string][]string, account string, time string) {
 
+	removableVolumes := make(map[string][]string)
+
 	for region, sliceOfIDs := range filteredSliceOfVolumes {
 
 		if sliceOfIDs == nil {
-			fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
+			//fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
 			fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
 			fmt.Printf("No Available Volumes in %s\n", region)
 			fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
-			fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
+			//fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
 		} else {
+			//fmt.Println("~~~~~~~~~~~")
 			fmt.Println("~~~~~~~~~~~")
-			fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
 			fmt.Println(region)
-			fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
 			fmt.Println("~~~~~~~~~~~")
+			//fmt.Println("~~~~~~~~~~~")
 
 			for _, volumeID := range sliceOfIDs {
 				fmt.Println(volumeID)
@@ -64,16 +66,12 @@ func ListVolumesAndConfirm(filteredSliceOfVolumes map[string][]string, account s
 			fmt.Println("Would you like to remove the above EBS Volumes? (y/n): ")
 			response := confirm()
 			if response == true {
-				ingest.RemoveAvailableVolumes(account, filteredSliceOfVolumes)
-			} else {
-				fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
-				fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
-				fmt.Println("EXITING: Nothing Deleted")
-				fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
-				fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
+				removableVolumes[region] = sliceOfIDs
 			}
 		}
-
+	}
+	if removableVolumes != nil {
+		ingest.RemoveAvailableVolumes(account, removableVolumes)
 	}
 	// if filteredSliceOfVolumes == nil {
 	// 	fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")

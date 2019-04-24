@@ -32,7 +32,7 @@ func RemoveAvailableVolumes(accountFlag string, regionsData map[string][]string)
 					fmt.Println(err.Error())
 				}
 			}
-			fmt.Printf("Successfully removed %s", volumeID)
+			fmt.Printf("Successfully removed %s\n", volumeID)
 		}
 
 	}
