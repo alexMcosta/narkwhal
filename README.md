@@ -85,12 +85,12 @@ The `-regions` flag has multiple possible in puts for example:
 - Multiple Regions
       - You can place multiple chosen regions separated by a comma.
       
-      EXAMPLE: `narkwhal -regions us-west-1,us-east-2,	eu-central-1`
+      EXAMPLE: `narkwhal -regions us-west-1,us-east-2, eu-central-1`.
 
 - All Regions
-      * To select all available regions just pass the value `ALL`
+      * To select all available regions just pass the value `ALL`.
       
-      * EXAMPLE: `narkwhal -regions ALL`
+      * EXAMPLE: `narkwhal -regions ALL`.
       
       * List of regions scoured with the `ALL` value are as follows:
 
