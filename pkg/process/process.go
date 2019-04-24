@@ -9,14 +9,15 @@ import (
 
 // MultiRegion will sort through comma seperated regions and make a slice of strings
 func MultiRegion(regions string) []string {
+
 	var sliceOfRegions []string
 
 	if strings.Contains(regions, ",") {
 		sliceOfRegions := strings.Split(regions, ",")
 		return sliceOfRegions
-	} else {
-		sliceOfRegions = append(sliceOfRegions, regions)
 	}
+
+	sliceOfRegions = append(sliceOfRegions, regions)
 
 	return sliceOfRegions
 

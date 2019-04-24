@@ -9,16 +9,18 @@ import (
 	"github.com/aws/aws-sdk-go/service/ec2"
 )
 
-// GrabAvailableVolumes Uses the AWS SDK to search for all available volumes in the specified region
+// GrabAvailableVolumes Uses the AWS SDK to search for all available volumes in the specified regions
+
 func GrabAvailableVolumes(accountFlag string, regions []string) map[string][]string {
 
+	// Make a map of regions so that way we can have the regions be the key with a slice of volume IDs
 	mapOfRegions := make(map[string][]string)
 
 	for _, region := range regions {
 
 		svc := createEC2Session(accountFlag, region)
 
-		// Let us filter for all available EBS volumes
+		// Struct to search for volumes with Status: Available
 		input := &ec2.DescribeVolumesInput{
 			Filters: []*ec2.Filter{
 				{
@@ -51,7 +53,7 @@ func GrabAvailableVolumes(accountFlag string, regions []string) map[string][]str
 	return mapOfRegions
 }
 
-// GetSliceOfIDs takes the struct of EBS volume data and retuens a slice of only the ID's
+// getSliceOfIDs takes the struct of EBS volume data and returns a slice of only the ID's
 func getSliceOfIDs(volume *ec2.DescribeVolumesOutput) []string {
 
 	var sliceOfIDs []string

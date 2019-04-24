@@ -29,6 +29,7 @@ func FilterVolumesByTime(regionData map[string][]string, accountFlag string, tim
 	stat := "Average"
 	metricDimensionName := "VolumeId"
 
+	// Loop through each region then child loops through volumes of region to see if they meet the criteria
 	for region, sliceOfIDs := range regionData {
 		svc := createCloudwatchSession(accountFlag, region)
 
@@ -60,16 +61,20 @@ func FilterVolumesByTime(regionData map[string][]string, accountFlag string, tim
 				MetricDataQueries: []*cloudwatch.MetricDataQuery{query},
 			})
 			if err != nil {
-				fmt.Println("There was an error grabbing available volumes in specified time")
+				fmt.Println("There was an error filtering available volumes in specified time")
 				fmt.Println(err.Error())
 				os.Exit(1)
 			}
 
-			// TODO: Refactor: This feels very wrong
+			// If the ID has metric data showing in CloudWatch then skip adding it to the filtered slices
+			// If a metric is detected then we do not need to continue with the loop
+			// Believe this can be refactored but
 			for _, metricdata := range resp.MetricDataResults {
-				if metricdata.Timestamps == nil {
-					filteredSliceOfVolumes = append(filteredSliceOfVolumes, volID)
+				if metricdata.Timestamps != nil {
+					continue
 				}
+				filteredSliceOfVolumes = append(filteredSliceOfVolumes, volID)
+				break
 			}
 
 			regionData[region] = filteredSliceOfVolumes
