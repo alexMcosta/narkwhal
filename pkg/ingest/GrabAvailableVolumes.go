@@ -10,7 +10,6 @@ import (
 )
 
 // GrabAvailableVolumes Uses the AWS SDK to search for all available volumes in the specified regions
-
 func GrabAvailableVolumes(accountFlag string, regions []string) map[string][]string {
 
 	// Make a map of regions so that way we can have the regions be the key with a slice of volume IDs
