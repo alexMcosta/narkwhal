@@ -107,4 +107,4 @@ vol-0d2b8eb6300a1b67d
 Would you like to remove the above EBS Volumes? (y/n): 
 ```
 
-[GO BACK TO README](https://github.com/alexMcosta/narkwhal/README.md)
+[GO BACK TO README](https://github.com/alexMcosta/narkwhal)
