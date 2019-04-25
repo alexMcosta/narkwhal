@@ -39,40 +39,9 @@ Usage of narkwhal:
         Lets you select the amount of time a volume has been available based on MS, seconds, and Hours (default "0s")
 ```
 
-Example of EBS volumes found and successful removal:
-```
-$ narkwhal -account default -region ap-northeast-1 -time 24h                                                          
-account: default, region: us-east-1, Not used within: 24h
----------------------
-vol-0e4a10ca6d4e1fb09
----------------------
-Would you like to remove the above EBS Volumes? (y/n): 
-y
-Successfully removed vol-0e4a10ca6d4e1fb09
-```
+### Flags
 
-Example of no available EBS volumes that meet the flags:
-```
-$ narkwhal -time 3h
-account: default, region: us-east-1, Not used within: 3h
-~~~~~~~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~
-EXITING: There are no available EBS volumes to remove in the us-east-1 region of account default that have been non-active for at least 3h
-~~~~~~~~~~~~~~~~~~~~~~
-```
-
-### More about the flags
-
-#### -account
-The account flag takes the account name between the square brackets from the `.aws/credentials` file. For example, to get the following: 
-
-```
-[Narkwhal]
-aws_access_key_id = IAMSUCHAVERYCOOLACCESSKEY
-aws_secret_access_key = 53cRE74CcEs5M30Wc47
-```
-
-The above credentials would be used if you passed `Narkwhal` through the account flag.
+#### [-account](https://github.com/alexMcosta/narkwhal/Documentation/Flags/account.md)
 
 #### -regions
 The `-regions` flag has multiple possible in puts for example:
