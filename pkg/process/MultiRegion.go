@@ -1,7 +1,6 @@
 package process
 
 import (
-	"fmt"
 	"strings"
 )
 
@@ -13,7 +12,6 @@ func MultiRegion(regions string) []string {
 
 	// Check for multiple input
 	sliceOfInput = checkMultipleInput(regions)
-	fmt.Println(sliceOfInput)
 
 	// Run through slice of inputs to concat all regions desired
 	for _, input := range sliceOfInput {
@@ -31,32 +29,6 @@ func MultiRegion(regions string) []string {
 		}
 	}
 
-	// if strings.Contains(regions, ",") {
-
-	// 	// See if the flag is region based and concat the regions based on input
-	// 	switch regions {
-	// 	case "AM":
-	// 		sliceOfRegions = america(sliceOfRegions)
-	// 	case "AP":
-	// 		sliceOfRegions = asiaPacific(sliceOfRegions)
-	// 	case "EU":
-	// 		sliceOfRegions = europe(sliceOfRegions)
-	// 	case "ALL":
-	// 		sliceOfRegions = allRegions()
-	// 	default:
-	// 		sliceOfRegions := strings.Split(regions, ",")
-	// 		return sliceOfRegions
-	// 	}
-	// }
-
-	// if strings.Contains(regions, ",") {
-	// 	sliceOfRegions := strings.Split(regions, ",")
-	// 	return sliceOfRegions
-	// }
-
-	// //sliceOfRegions = append(sliceOfRegions, regions)
-
-	fmt.Println(sliceOfRegions)
 	return sliceOfRegions
 
 }
