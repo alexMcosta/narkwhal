@@ -78,12 +78,8 @@ The above credentials would be used if you passed `Narkwhal` through the account
 The `-regions` flag has multiple possible in puts for example:
 
 - One Region
-<<<<<<< HEAD
-      - You will place the common format of that region such as `us-west-1` The default if the region flag is not used will be `us-east-1`.
-      
-=======
       - You can place the common format of that region such as `us-west-1` The default if the region flag is not used will be `us-east-1`.
->>>>>>> multiRegion
+
       - EXAMPLE: `narkwhal -regions us-west-2`
 
 - Region Groupings
