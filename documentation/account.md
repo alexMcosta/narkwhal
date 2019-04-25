@@ -22,4 +22,4 @@ aws_secret_access_key = 53cRE74CcEs5M30Wc47
 
 **NOTE:** If you do not have an account in your file associated as `default` then you will get an error if no account is selected.
 
-[GO BACK TO README](account.md)
+[GO BACK TO README](README.md)
