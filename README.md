@@ -125,7 +125,6 @@ The input is based off of the Go function `time.Duration()`.
 ### Feature Roadmap
 
 #### Minor features
-- Add the ability to scour some or all regions
 - Add the ability to scour some or all accounts
 - Add flag for either choosing specific id's or all EBS volumes
 - Cache session to cut on calls
