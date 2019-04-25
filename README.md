@@ -41,74 +41,9 @@ Usage of narkwhal:
 
 ### Flags
 
-#### [-account](https://github.com/alexMcosta/narkwhal/Documentation/Flags/account.md)
+#### [-account](https://github.com/alexMcosta/narkwhal/blob/master/documentation/account.md)
 
-#### -regions
-The `-regions` flag has multiple possible in puts for example:
-
-- One Region
-      - You can place the common format of that region such as `us-west-1` The default if the region flag is not used will be `us-east-1`.
-
-      - EXAMPLE: `narkwhal -regions us-west-2`
-
-- Region Groupings
-      - You can select regions based on geographic locations such as America `AM`, Europe `EU`, and Asia Pacific `AP`.
-      - EXAMPLE: `narkwhal -regions AM`
-            
-            - `AM`
-                  - us-east-1
-		      - us-east-2
-		      - us-west-1
-		      - us-west-2
-                  - ca-central-1
-                  - sa-east-1
-            
-            - `AP`
-                  - ap-south-1
-		      - ap-northeast-1
-		      - ap-northeast-2
-		      - ap-southeast-1
-		      - ap-southeast-2
-            
-            - `EU`
-                  - eu-central-1
-		      - eu-west-1
-		      - eu-west-2
-		      - eu-west-3
-		      - eu-north-1
-
-
-- Multiple Regions
-      - You can place multiple chosen regions separated by a comma.
-      
-      EXAMPLE: `narkwhal -regions us-west-1,us-east-2, eu-central-1`.
-
-- All Regions
-      * To select all available regions just pass the value `ALL`.
-      
-      * EXAMPLE: `narkwhal -regions ALL`.
-      
-      * List of regions scoured with the `ALL` value are as follows:
-
-      - us-east-1
-	- us-east-2
-	- us-west-1
-	- us-west-2
-	- ap-south-1
-	- ap-northeast-1
-	- ap-northeast-2
-	- ap-southeast-1
-	- ap-southeast-2
-	- ca-central-1
-	- eu-central-1
-	- eu-west-1
-	- eu-west-2
-	- eu-west-3
-	- eu-north-1
-	- sa-east-1
-      
-      * NOTE: China, Government, and ap-northeast-3 were left out due to limitations.
-      
+#### [-regions](https://github.com/alexMcosta/narkwhal/blob/master/documentation/regions.md)
 
 #### -time
 The time flag uses Cloudwatch to check if there was any activity from the EBS volumes since the time specified and it does this by checking the `Read Ops` metric. 
