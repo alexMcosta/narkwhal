@@ -1,10 +1,3 @@
-The time flag uses Cloudwatch to check if there was any activity from the EBS volumes since the time specified and it does this by checking the `Read Ops` metric. 
-Time does not check for the last time the volume was attached but rather the last time the volume showed any kind of read activity. That being said, the volume 
-could have been attached to an EC2 instance that was then stopped for a month. If that EC2 instance was then terminated, without being activated again, the volume 
-would be up for deletion if a time flag of `48h` was passed since it would then be available and also show no signs of activity for longer then 48 hours.
-
-The input is based off of the Go function `time.Duration()`.
-
 # Time Flag
 
 The time flag uses Cloudwatch to check if there was any activity from the EBS volumes since the time specified and it does this by checking the `Read Ops` metric.

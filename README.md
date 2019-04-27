@@ -56,6 +56,7 @@ The `-time` flag uses Cloudwatch to check if there was any activity from the EBS
 - Add the ability to scour some accounts,
 - Add the ability to choose which volumes to delete.
 - Add a silent mode option.
+- Add Longer time measurements for the time flag (Days and weeks)
 
 ### Medium features
 - Have Narkwhal `-time` check Cloudwatche's `Write Ops` as well as `Read Ops` when checking time to be more accurate about the volume being inactive.
