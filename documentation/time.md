@@ -16,6 +16,6 @@ The input is based off what can be passed through the `Duration()` function of t
 $ narkwhal -time 30h
 ```
 
-The above would return all available volumes in the default region, in us-east-1, that have had no metrics reporting from Cloudwatch's `Read Ops`.
+The above would return all available volumes in the default region, in us-east-1, that have had no metrics reporting from Cloudwatch's `Read Ops` for the past 30 hours.
 
 [GO BACK TO README](https://github.com/alexMcosta/narkwhal#flags)
