@@ -33,38 +33,40 @@ If you see the following then it is working and tells you the commands
 Usage of narkwhal:
   -account string
         Lets you select witch AWS account you would like to make changes to (default "default")
-  -region string
-        Lets you select which region you would like to run Narkwhal on (default "us-east-1")
+  -regions string
+        Lets you select which regions you would like to run Narkwhal on (default "us-east-1")
   -time string
         Lets you select the amount of time a volume has been available based on MS, seconds, and Hours (default "0s")
 ```
 
 ### Flags
 
-#### [-account](https://github.com/alexMcosta/narkwhal/blob/master/documentation/account.md)
+#### [Account Flag](https://github.com/alexMcosta/narkwhal/blob/master/documentation/account.md)
+The `-account` flag takes the account name between the square brackets from the `.aws/credentials` file and uses it with the AWS SDK.
 
-#### [-regions](https://github.com/alexMcosta/narkwhal/blob/master/documentation/regions.md)
+#### [Regions Flag](https://github.com/alexMcosta/narkwhal/blob/master/documentation/regions.md)
+The `-regions` flag lets you choose which region or regions you would like to select.
 
-#### -time
-The time flag uses Cloudwatch to check if there was any activity from the EBS volumes since the time specified and it does this by checking the `Read Ops` metric. 
-Time does not check for the last time the volume was attached but rather the last time the volume showed any kind of read activity. That being said, the volume 
-could have been attached to an EC2 instance that was then stopped for a month. If that EC2 instance was then terminated, without being activated again, the volume 
-would be up for deletion if a time flag of `48h` was passed since it would then be available and also show no signs of activity for longer then 48 hours.
-
-The input is based off of the Go function `time.Duration()`.
+#### [Time Flag](https://github.com/alexMcosta/narkwhal/blob/master/documentation/time.md)
+The `-time` flag uses Cloudwatch to check if there was any activity from the EBS volumes since the time specified and it does this by checking the `Read Ops` metric.
 
 ### Feature Roadmap
 
 #### Minor features
-- Add the ability to scour some or all accounts
-- Add flag for either choosing specific id's or all EBS volumes
-- Cache session to cut on calls
-- Have Narkwhal take a config file and have it run as a cronjob.
-- Silent mode
+- Add the ability to scour some accounts,
+- Add the ability to choose which volumes to delete.
+- Add a silent mode option.
+
+### Medium features
+- Have Narkwhal `-time` check Cloudwatche's `Write Ops` as well as `Read Ops` when checking time to be more accurate about the volume being inactive.
 
 #### Major features
-- Make binaries to install on multiple platforms so it does not require go
-- Notifications 
+- Make binaries to install on multiple platforms so it does not require go.
+- Notifications.
+- Have Narkwhal take a config file so flags are not needed.
+- Create a Docker image to have Narkwhal run as a microservice in silent mode.
+- Create a GUI option and have it boot up on a localhost.
+- Add the ability to scour all accounts.
 
 ## Authors
 
