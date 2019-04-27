@@ -53,7 +53,7 @@ The `-time` flag uses Cloudwatch to check if there was any activity from the EBS
 ### Feature Roadmap
 
 #### Minor features
-- Add the ability to scour multiple accounts. `In Progress`
+- **`In Progress`** Add the ability to scour multiple accounts. **`In Progress`**
 - Add the ability to choose which volumes to delete.
 - Add a silent mode option.
 - Add Longer time measurements for the time flag (Days and weeks)
