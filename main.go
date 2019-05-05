@@ -7,17 +7,17 @@ import (
 
 func main() {
 	// Flags
-	account, regions, time := process.GetFlags()
+	acc, reg, time := process.GetFlags()
 
 	// Take the regions flag and break it down by comma seperation
-	sliceOfRegions := process.MultiRegion(regions)
+	sliceReg := process.MultiRegion(reg)
 
 	// Get EBS Volume IDs
-	mapOfRegions := ingest.GrabAvailableVolumes(account, sliceOfRegions)
+	mapReg := ingest.GrabAvailableVolumes(acc, sliceReg)
 
 	// Filter ID's based on time given
-	filteredVolumeIDs := ingest.FilterVolumesByTime(mapOfRegions, account, time)
+	filVol := ingest.FilterVolumesByTime(mapReg, acc, time)
 
 	// Show and confirm deletion
-	process.ListVolumesAndConfirm(filteredVolumeIDs, account, time)
+	process.ListVolumesAndConfirm(filVol, acc, time)
 }
