@@ -10,7 +10,7 @@ func main() {
 	acc, reg, time := process.GetFlags()
 
 	// Take the regions flag and break it down by comma seperation
-	sliceReg := process.MultiRegion(reg)
+	sliceReg := multiRegion(reg)
 
 	// Get EBS Volume IDs
 	mapReg := ingest.GrabAvailableVolumes(acc, sliceReg)
