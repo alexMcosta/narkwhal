@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/alexmcosta/narkwhal/pkg/ingest"
+	"github.com/alexmcosta/narkwhal/pkg/cloud"
 )
 
 func main() {
@@ -12,10 +12,10 @@ func main() {
 	sliceReg := multiRegion(reg)
 
 	// Get EBS Volume IDs
-	mapReg := ingest.GrabAvailableVolumes(acc, sliceReg)
+	mapReg := cloud.GrabAvailableVolumes(acc, sliceReg)
 
 	// Filter ID's based on time given
-	filVol := ingest.FilterVolumesByTime(mapReg, acc, time)
+	filVol := cloud.FilterVolumesByTime(mapReg, acc, time)
 
 	// Show and confirm deletion
 	showVolumes(filVol, acc, time)

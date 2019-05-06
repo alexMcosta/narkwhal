@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/alexmcosta/narkwhal/pkg/ingest"
+	"github.com/alexmcosta/narkwhal/pkg/cloud"
 )
 
 // showVolumes takes a list of volume ID's and confirms if the user wants them removed
-// If the user wants them removed it calls on the ingest package
+// If the user wants them removed it calls on the cloud package
 func showVolumes(volSlice map[string][]string, acc string, time string) {
 
 	remVol := make(map[string][]string)
@@ -38,7 +38,7 @@ func showVolumes(volSlice map[string][]string, acc string, time string) {
 		}
 	}
 	if remVol != nil {
-		ingest.RemoveAvailableVolumes(acc, remVol)
+		cloud.RemoveAvailableVolumes(acc, remVol)
 	}
 }
 
