@@ -29,7 +29,7 @@ var europe = []string{
 	"eu-north-1",
 }
 
-// MultiRegion will sort through comma seperated regions and make a slice of strings.
+// multiRegion will sort through comma seperated regions and make a slice of strings.
 func multiRegion(reg string) []string {
 
 	var sliceReg []string
