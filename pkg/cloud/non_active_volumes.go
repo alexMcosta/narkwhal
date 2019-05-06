@@ -11,7 +11,7 @@ import (
 )
 
 // FilterVolumesByTime Uses Cloudwatch to get back any volumes that have not had read ops data report at a specified time.
-func FilterVolumesByTime(regionData map[string][]string, accountFlag string, timeFlag string) map[string][]string {
+func NonActiveVolumes(regionData map[string][]string, accountFlag string, timeFlag string) map[string][]string {
 
 	// If the time value given is 0s we can just leave here with the ID's passed through
 	if timeFlag == "0s" {
@@ -24,7 +24,8 @@ func FilterVolumesByTime(regionData map[string][]string, accountFlag string, tim
 	duration, _ := time.ParseDuration("-" + timeFlag)
 	startTime := endTime.Add(duration)
 	nameSpace := "AWS/EBS"
-	metricName := "VolumeReadOps"
+	metricName1 := "VolumeReadOps"
+	metricName2 := "VolumeWriteOps"
 	period := int64(60)
 	stat := "Average"
 	metricDimensionName := "VolumeId"
@@ -42,7 +43,7 @@ func FilterVolumesByTime(regionData map[string][]string, accountFlag string, tim
 				MetricStat: &cloudwatch.MetricStat{
 					Metric: &cloudwatch.Metric{
 						Namespace:  &nameSpace,
-						MetricName: &metricName,
+						MetricName: &metricName1,
 						Dimensions: []*cloudwatch.Dimension{
 							&cloudwatch.Dimension{
 								Name:  &metricDimensionName,
@@ -55,7 +56,21 @@ func FilterVolumesByTime(regionData map[string][]string, accountFlag string, tim
 				},
 			}
 
-			resp, err := svc.GetMetricData(&cloudwatch.GetMetricDataInput{
+			respRead, err := svc.GetMetricData(&cloudwatch.GetMetricDataInput{
+				EndTime:           &endTime,
+				StartTime:         &startTime,
+				MetricDataQueries: []*cloudwatch.MetricDataQuery{query},
+			})
+			if err != nil {
+				fmt.Println("There was an error filtering available volumes in specified time")
+				fmt.Println(err.Error())
+				os.Exit(1)
+			}
+
+			// Replace the metric name with the write metric
+			query.MetricStat.Metric.MetricName = &metricName2
+
+			respWrite, err := svc.GetMetricData(&cloudwatch.GetMetricDataInput{
 				EndTime:           &endTime,
 				StartTime:         &startTime,
 				MetricDataQueries: []*cloudwatch.MetricDataQuery{query},
@@ -69,8 +84,16 @@ func FilterVolumesByTime(regionData map[string][]string, accountFlag string, tim
 			// If the ID has metric data showing in CloudWatch then skip adding it to the filtered slices
 			// If a metric is detected then we do not need to continue with the loop
 			// Believe this can be refactored but
-			for _, metricdata := range resp.MetricDataResults {
-				if metricdata.Timestamps != nil {
+			for _, m := range respRead.MetricDataResults {
+				if m.Timestamps != nil {
+					continue
+				}
+				filteredSliceOfVolumes = append(filteredSliceOfVolumes, volID)
+				break
+			}
+
+			for _, m := range respWrite.MetricDataResults {
+				if m.Timestamps != nil {
 					continue
 				}
 				filteredSliceOfVolumes = append(filteredSliceOfVolumes, volID)

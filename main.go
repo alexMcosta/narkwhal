@@ -15,7 +15,7 @@ func main() {
 	mapReg := cloud.GrabAvailableVolumes(acc, sliceReg)
 
 	// Filter ID's based on time given
-	filVol := cloud.FilterVolumesByTime(mapReg, acc, time)
+	filVol := cloud.NonActiveVolumes(mapReg, acc, time)
 
 	// Show and confirm deletion
 	showVolumes(filVol, acc, time)
