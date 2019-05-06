@@ -2,12 +2,11 @@ package main
 
 import (
 	"github.com/alexmcosta/narkwhal/pkg/ingest"
-	"github.com/alexmcosta/narkwhal/pkg/process"
 )
 
 func main() {
 	// Flags
-	acc, reg, time := process.GetFlags()
+	acc, reg, time := getFlags()
 
 	// Take the regions flag and break it down by comma seperation
 	sliceReg := multiRegion(reg)
