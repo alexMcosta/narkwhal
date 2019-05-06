@@ -19,5 +19,5 @@ func main() {
 	filVol := ingest.FilterVolumesByTime(mapReg, acc, time)
 
 	// Show and confirm deletion
-	process.ListVolumesAndConfirm(filVol, acc, time)
+	showVolumes(filVol, acc, time)
 }

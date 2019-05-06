@@ -5,6 +5,13 @@ import (
 	"testing"
 )
 
+func BenchmarkMultiRegion(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		regions := "ALL"
+		multiRegion(regions)
+	}
+}
+
 func TestMultiRegion(t *testing.T) {
 
 	checkSums := func(t *testing.T, got, want []string) {
@@ -135,11 +142,4 @@ func TestMultiRegion(t *testing.T) {
 
 		checkSums(t, got, want)
 	})
-}
-
-func BenchmarkMultiRegion(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		regions := "ALL"
-		multiRegion(regions)
-	}
 }
