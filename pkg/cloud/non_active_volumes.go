@@ -102,7 +102,21 @@ func NonActiveVolumes(regionData map[string][]string, accountFlag string, timeFl
 
 			regionData[region] = filteredSliceOfVolumes
 
+			regionData[region] = unique(regionData[region])
+
 		}
 	}
 	return regionData
+}
+
+func unique(volSlice []string) []string {
+	keys := make(map[string]bool)
+	list := []string{}
+	for _, entry := range volSlice {
+		if _, value := keys[entry]; !value {
+			keys[entry] = true
+			list = append(list, entry)
+		}
+	}
+	return list
 }
