@@ -34,7 +34,7 @@ func NonActiveVolumes(regionData map[string][]string, accountFlag string, timeFl
 	for region, sliceOfIDs := range regionData {
 		svc := createCloudwatchSession(accountFlag, region)
 
-		var filteredSliceOfVolumes []string
+		var sliceVol []string
 
 		for _, volID := range sliceOfIDs {
 
@@ -88,7 +88,7 @@ func NonActiveVolumes(regionData map[string][]string, accountFlag string, timeFl
 				if m.Timestamps != nil {
 					continue
 				}
-				filteredSliceOfVolumes = append(filteredSliceOfVolumes, volID)
+				sliceVol = append(sliceVol, volID)
 				break
 			}
 
@@ -96,11 +96,11 @@ func NonActiveVolumes(regionData map[string][]string, accountFlag string, timeFl
 				if m.Timestamps != nil {
 					continue
 				}
-				filteredSliceOfVolumes = append(filteredSliceOfVolumes, volID)
+				sliceVol = append(sliceVol, volID)
 				break
 			}
 
-			regionData[region] = filteredSliceOfVolumes
+			regionData[region] = sliceVol
 
 			regionData[region] = unique(regionData[region])
 
