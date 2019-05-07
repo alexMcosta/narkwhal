@@ -102,7 +102,11 @@ func NonActiveVolumes(regionData map[string][]string, accountFlag string, timeFl
 
 			regionData[region] = sliceVol
 
-			regionData[region] = unique(regionData[region])
+			// Do not send back empty values
+			uReg := unique(regionData[region])
+			if len(uReg) != 0 {
+				regionData[region] = uReg
+			}
 
 		}
 	}
@@ -118,5 +122,6 @@ func unique(volSlice []string) []string {
 			list = append(list, entry)
 		}
 	}
+
 	return list
 }

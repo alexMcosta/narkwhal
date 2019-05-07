@@ -18,7 +18,7 @@ func showVolumes(volSlice map[string][]string, acc string, time string) {
 
 		if idSlice == nil {
 			fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
-			fmt.Printf("No Available Volumes in %s\n", reg)
+			fmt.Printf("No volumes meet specified criteria in %s\n", reg)
 			fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
 		} else {
 			fmt.Println("~~~~~~~~~~~")
