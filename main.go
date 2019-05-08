@@ -12,7 +12,7 @@ func main() {
 	sliceReg := multiRegion(reg)
 
 	// Get EBS Volume IDs
-	mapReg := cloud.GrabAvailableVolumes(acc, sliceReg)
+	mapReg := cloud.GetVolumes(acc, sliceReg)
 
 	// Filter ID's based on time given
 	filVol := cloud.NonActiveVolumes(mapReg, acc, time)
