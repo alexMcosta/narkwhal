@@ -9,7 +9,7 @@ import (
 )
 
 // RemoveAvailableVolumes Takes a slice of Volume ID's and deletes them
-func RemoveAvailableVolumes(accountFlag string, regionsData map[string][]string) {
+func RemoveVolumes(accountFlag string, regionsData map[string][]string) {
 
 	for region, volID := range regionsData {
 
