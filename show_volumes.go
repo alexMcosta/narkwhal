@@ -38,7 +38,7 @@ func showVolumes(volSlice map[string][]string, acc string, time string) {
 		}
 	}
 	if remVol != nil {
-		cloud.RemoveAvailableVolumes(acc, remVol)
+		cloud.RemoveVolumes(acc, remVol)
 	}
 }
 
