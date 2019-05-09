@@ -8,6 +8,9 @@ func main() {
 	// Flags
 	acc, reg, time := getFlags()
 
+	// Filter time for days and weeks
+	time = timeMeasures(time)
+
 	// Take the regions flag and break it down by comma seperation
 	sliceReg := multiRegion(reg)
 

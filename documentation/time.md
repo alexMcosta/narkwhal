@@ -8,8 +8,7 @@ Time does not check for the last time the volume was attached but rather the las
 
 ## Values
 
-The input is based off what can be passed through the `Duration()` function of the Go library `time`. That being said, the duration function takes a string that is of a numeric value followed by characters representing the time measurement value such as `4ms` (4 miliseconds), `25s` (25 seconds), `10m` (10 minutes), and `48h` (48 hours). At this time the highest time measurement accepted is hours and I have it in the feature-road-map to include functionality to allow the time measurements of days and weeks.
-
+The input is based off what can be passed through the `Duration()` function of the Go library `time`. That being said, the duration function takes a string that is of a numeric value followed by characters representing the time measurement value such as `4ms` (4 miliseconds), `25s` (25 seconds), `15m` (15 minutes of fame), `8h` (8 hours), `48d` (48 days later), and `1w` (1 week since you looked at me).
 ## Example
 
 ```
