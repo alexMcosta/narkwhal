@@ -2,7 +2,7 @@
 
 ![alt-text](https://i.pinimg.com/originals/74/68/f1/7468f1d665e551fad8eac0c9f97977e3.jpg)
 
-Narkwhal goes through your AWS account using the AWS SDK looking for available EBS volumes in the specified region and deletes them.
+Narkwhal is a CLI that goes through an AWS account and removes parked EBS volumes based on user specified criteria.
 
 ## Getting Started
 
@@ -48,7 +48,7 @@ The `-account` flag takes the account name between the square brackets from the 
 The `-regions` flag lets you choose which region or regions you would like to select.
 
 #### [Time Flag](https://github.com/alexMcosta/narkwhal/blob/master/documentation/time.md)
-The `-time` flag uses Cloudwatch to check if there was any activity from the EBS volumes since the time specified and it does this by checking the `Read Ops` metric.
+The `-time` flag uses Cloudwatch to check if there was any activity from the EBS volumes since the time specified and it does this by checking both the `Read Ops` and `Write Ops` metrics.
 
 ### Feature Roadmap
 
@@ -56,9 +56,6 @@ The `-time` flag uses Cloudwatch to check if there was any activity from the EBS
 - Add the ability to scour multiple accounts.
 - Add the ability to choose which volumes to delete.
 - Add a silent mode option.
-
-#### Medium features
-- Have Narkwhal `-time` check Cloudwatche's `Write Ops` as well as `Read Ops` when checking time to be more accurate about the volume being inactive.
 
 #### Major features
 - Make binaries to install on multiple platforms so it does not require go.
