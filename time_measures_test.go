@@ -23,4 +23,14 @@ func TestTimeMeasures(t *testing.T) {
 		}
 
 	})
+
+	t.Run("test with miliseconds", func(t *testing.T) {
+		got := timeMeasures("1ms")
+		want := "1ms"
+
+		if want != got {
+			t.Errorf("got %v want %v", got, want)
+		}
+
+	})
 }
