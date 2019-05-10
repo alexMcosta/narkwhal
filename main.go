@@ -11,15 +11,16 @@ func main() {
 	// Filter time for days and weeks
 	time = timeMeasures(time)
 
-	// Take the regions flag and break it down by comma seperation
+	// Take the flag inputs and break it down by comma seperation
 	sliceReg := multiRegion(reg)
+	sliceAcc := multiAccount(acc)
 
 	// Get EBS Volume IDs
-	mapReg := cloud.GetVolumes(acc, sliceReg)
+	mapReg := cloud.GetVolumes(sliceAcc, sliceReg)
 
 	// Filter ID's based on time given
-	filVol := cloud.NonActiveVolumes(mapReg, acc, time)
+	filVol := cloud.NonActiveVolumes(mapReg, sliceAcc, time)
 
 	// Show and confirm deletion
-	showVolumes(filVol, acc, time)
+	showVolumes(filVol, sliceAcc, time)
 }

@@ -10,45 +10,55 @@ import (
 )
 
 // GrabAvailableVolumes Uses the AWS SDK to search for all available volumes in the specified regions
-func GetVolumes(accountFlag string, regions []string) map[string][]string {
+func GetVolumes(accounts []string, regions []string) map[string]map[string][]string {
 
 	// Make a map of regions so that way we can have the regions be the key with a slice of volume IDs
-	mapOfRegions := make(map[string][]string)
+	mapOfRegions := make(map[string]map[string][]string)
 
-	for _, region := range regions {
+	for _, account := range accounts {
+		for _, region := range regions {
 
-		svc := createEC2Session(accountFlag, region)
+			if mapOfRegions[account] == nil {
+				mapOfRegions[account] = make(map[string][]string)
+			}
 
-		// Struct to search for volumes with Status: Available
-		input := &ec2.DescribeVolumesInput{
-			Filters: []*ec2.Filter{
-				{
-					Name: aws.String("status"),
-					Values: []*string{
-						aws.String("available"),
+			svc := createEC2Session(account, region)
+
+			// Struct to search for volumes with Status: Available
+			input := &ec2.DescribeVolumesInput{
+				Filters: []*ec2.Filter{
+					{
+						Name: aws.String("status"),
+						Values: []*string{
+							aws.String("available"),
+						},
 					},
 				},
-			},
-		}
-
-		// Go get them volumes and send an AWS error if there is one
-		volumes, err := svc.DescribeVolumes(input)
-		if err != nil {
-			if aerr, ok := err.(awserr.Error); ok {
-				switch aerr.Code() {
-				default:
-					fmt.Println(aerr.Error())
-					os.Exit(1)
-				}
-			} else {
-				fmt.Println(err.Error())
 			}
+
+			// Go get them volumes and send an AWS error if there is one
+			volumes, err := svc.DescribeVolumes(input)
+			if err != nil {
+				if aerr, ok := err.(awserr.Error); ok {
+					switch aerr.Code() {
+					default:
+						fmt.Println(aerr.Error())
+						fmt.Println(account)
+						os.Exit(1)
+					}
+				} else {
+					fmt.Println(err.Error())
+				}
+			}
+
+			fmt.Println(account)
+			fmt.Println(region)
+			fmt.Println(mapOfRegions)
+			mapOfRegions[account][region] = getSliceOfIDs(volumes)
+
 		}
-
-		mapOfRegions[region] = getSliceOfIDs(volumes)
-
 	}
-
+	fmt.Println("Made it to the end of Get Volumes")
 	return mapOfRegions
 }
 

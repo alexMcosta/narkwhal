@@ -10,30 +10,33 @@ import (
 
 // showVolumes takes a list of volume ID's and confirms if the user wants them removed
 // If the user wants them removed it calls on the cloud package
-func showVolumes(volSlice map[string][]string, acc string, time string) {
+func showVolumes(acctMap map[string]map[string][]string, acc []string, time string) {
 
 	remVol := make(map[string][]string)
 
-	for reg, idSlice := range volSlice {
+	for aa, rr := range acctMap {
 
-		if idSlice == nil {
-			fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
-			fmt.Printf("No volumes meet specified criteria in %s\n", reg)
-			fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
-		} else {
-			fmt.Println("~~~~~~~~~~~")
-			fmt.Println(reg)
-			fmt.Println("~~~~~~~~~~~")
+		for r, idSlice := range rr {
 
-			for _, volID := range idSlice {
-				fmt.Println(volID)
-			}
+			if idSlice == nil {
+				fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
+				fmt.Printf("No volumes meet specified criteria in %s, %s\n", aa, r)
+				fmt.Println("~~~~~~~~~~~~~~~~~~~~~~")
+			} else {
+				fmt.Println("~~~~~~~~~~~")
+				fmt.Printf("Account: %s --- Region: %s\n", aa, r)
+				fmt.Println("~~~~~~~~~~~")
 
-			fmt.Println("---------------------")
-			fmt.Println("Would you like to remove the above EBS Volumes? (y/n): ")
-			response := confirm()
-			if response == true {
-				remVol[reg] = idSlice
+				for _, volID := range idSlice {
+					fmt.Println(volID)
+				}
+
+				fmt.Println("---------------------")
+				fmt.Println("Would you like to remove the above EBS Volumes? (y/n): ")
+				response := confirm()
+				if response == true {
+					remVol[r] = idSlice
+				}
 			}
 		}
 	}
