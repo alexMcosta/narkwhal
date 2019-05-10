@@ -12,7 +12,7 @@ import (
 // If the user wants them removed it calls on the cloud package
 func showVolumes(acctMap map[string]map[string][]string, acc []string, time string) {
 
-	remVol := make(map[string][]string)
+	remVol := make(map[string]map[string][]string)
 
 	for aa, rr := range acctMap {
 
@@ -34,14 +34,17 @@ func showVolumes(acctMap map[string]map[string][]string, acc []string, time stri
 				fmt.Println("---------------------")
 				fmt.Println("Would you like to remove the above EBS Volumes? (y/n): ")
 				response := confirm()
+				if remVol[aa] == nil {
+					remVol[aa] = make(map[string][]string)
+				}
 				if response == true {
-					remVol[r] = idSlice
+					remVol[aa][r] = idSlice
 				}
 			}
 		}
 	}
 	if remVol != nil {
-		cloud.RemoveVolumes(acc, remVol)
+		cloud.RemoveVolumes(remVol)
 	}
 }
 

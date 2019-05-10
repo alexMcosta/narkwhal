@@ -9,12 +9,12 @@ import (
 )
 
 // RemoveAvailableVolumes Takes a slice of Volume ID's and deletes them
-func RemoveVolumes(accounts []string, regionsData map[string][]string) {
+func RemoveVolumes(acctData map[string]map[string][]string) {
 
-	for _, account := range accounts {
-		for region, volID := range regionsData {
+	for acct, regions := range acctData {
+		for region, volID := range regions {
 
-			svc := createEC2Session(account, region)
+			svc := createEC2Session(acct, region)
 
 			for _, volumeID := range volID {
 
@@ -35,7 +35,6 @@ func RemoveVolumes(accounts []string, regionsData map[string][]string) {
 				}
 				fmt.Printf("Successfully removed %s\n", volumeID)
 			}
-
 		}
 	}
 
