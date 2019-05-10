@@ -1,10 +1,10 @@
 # Time Flag
 
-The time flag uses Cloudwatch to check if there was any activity from the EBS volumes since the time specified and it does this by checking the `Read Ops` metric.
+The time flag uses Cloudwatch to check if there was any activity from the EBS volumes since the time specified and it does this by checking the `Read Ops` and `Write Ops` metric.
 
 ## How Time Flag Works
 
-Time does not check for the last time the volume was attached but rather the last time the volume showed any kind of read activity via the `Read Ops` metric. That being said, the volume could have been attached to an EC2 instance that was then stopped for a month. If that EC2 instance was then terminated, without being activated again, the volume would be up for deletion if a time flag of `48h` was passed since it would then be available and also show no signs of activity via `Read Ops` for longer then 48 hours. At this time there is a feature in the road-map to include checking Cloudwatch's `Write Ops` metric to increase the likeliness that the volume is inactive.
+Time does not check for the last time the volume was attached but rather the last time the volume showed any kind of read activity via the `Read Ops` or `Write Ops` metric. That being said, the volume could have been attached to an EC2 instance that was then stopped for a month. If that EC2 instance was then terminated, without being activated again, the volume would be up for deletion if a time flag of `48h` was passed since it would then be available and also show no signs of activity via `Read Ops` or `Write Ops` for longer then 48 hours.
 
 ## Values
 
@@ -15,6 +15,6 @@ The input is based off what can be passed through the `Duration()` function of t
 $ narkwhal -time 30h
 ```
 
-The above would return all available volumes in the default region, in us-east-1, that have had no metrics reporting from Cloudwatch's `Read Ops` for the past 30 hours.
+The above would return all available volumes in the default region, in us-east-1, that have had no metrics reporting from Cloudwatch's `Read Ops` or `Write Ops` for the past 30 hours.
 
 [GO BACK TO README](https://github.com/alexMcosta/narkwhal#flags)
