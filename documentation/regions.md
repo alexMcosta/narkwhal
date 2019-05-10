@@ -20,8 +20,7 @@ Example of an empty return:
 $ narkwhal -regions us-west-1
 account: default, regions: us-west-1, Not used within: 0s
 ~~~~~~~~~~~~~~~~~~~~~~
-No Available Volumes in us-west-1
-~~~~~~~~~~~~~~~~~~~~~~
+No volumes meet specified criteria in default, us-west-1
 ```
 
 Example of a value return:
@@ -29,10 +28,11 @@ Example of a value return:
 ```
 account: default, regions: us-west-1, Not used within: 0s
 ~~~~~~~~~~~
-us-west-1
+Account: default --- Region: us-west-1
 ~~~~~~~~~~~
-vol-0d2b7ec6350a1b67d
+vol-02827a3ade89c1ffc
 ---------------------
+Would you like to remove the above EBS Volumes? (y/n):
 ```
 
 ### Region Grouping
@@ -59,21 +59,15 @@ The following would be outputed:
 ```     
 account: default, regions: AM, Not used within: 0s
 ~~~~~~~~~~~~~~~~~~~~~~
-No Available Volumes in ca-central-1
+No volumes meet specified criteria in default, us-east-1
 ~~~~~~~~~~~~~~~~~~~~~~
 ~~~~~~~~~~~~~~~~~~~~~~
-No Available Volumes in sa-east-1
-~~~~~~~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~
-No Available Volumes in us-east-1
-~~~~~~~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~
-No Available Volumes in us-east-2
+No volumes meet specified criteria in default, us-east-2
 ~~~~~~~~~~~~~~~~~~~~~~
 ~~~~~~~~~~~
-us-west-1
+Account: default --- Region: us-west-1
 ~~~~~~~~~~~
-vol-0d2b8eb6300a1b67d
+vol-02827a3ade89c1ffc
 ---------------------
 Would you like to remove the above EBS Volumes? (y/n):
 ```
@@ -91,20 +85,26 @@ I would get the following output
 ```
 account: default, regions: AP,us-west-1, Not used within: 0s
 ~~~~~~~~~~~~~~~~~~~~~~
-No Available Volumes in ap-northeast-2
+No volumes meet specified criteria in default, ap-south-1
 ~~~~~~~~~~~~~~~~~~~~~~
 ~~~~~~~~~~~~~~~~~~~~~~
-No Available Volumes in ap-southeast-1
+No volumes meet specified criteria in default, ap-northeast-1
 ~~~~~~~~~~~~~~~~~~~~~~
 ~~~~~~~~~~~~~~~~~~~~~~
-No Available Volumes in ap-southeast-2
+No volumes meet specified criteria in default, ap-northeast-2
+~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
+No volumes meet specified criteria in default, ap-southeast-1
+~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
+No volumes meet specified criteria in default, ap-southeast-2
 ~~~~~~~~~~~~~~~~~~~~~~
 ~~~~~~~~~~~
-us-west-1
+Account: default --- Region: us-west-1
 ~~~~~~~~~~~
-vol-0d2b8eb6300a1b67d
+vol-02827a3ade89c1ffc
 ---------------------
-Would you like to remove the above EBS Volumes? (y/n): 
+Would you like to remove the above EBS Volumes? (y/n):
 ```
 
 [GO BACK TO README](https://github.com/alexMcosta/narkwhal#flags)
