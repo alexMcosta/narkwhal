@@ -43,22 +43,15 @@ func GetVolumes(accounts []string, regions []string) map[string]map[string][]str
 					switch aerr.Code() {
 					default:
 						fmt.Println(aerr.Error())
-						fmt.Println(account)
 						os.Exit(1)
 					}
 				} else {
 					fmt.Println(err.Error())
 				}
 			}
-
-			fmt.Println(account)
-			fmt.Println(region)
-			fmt.Println(mapOfRegions)
 			mapOfRegions[account][region] = getSliceOfIDs(volumes)
-
 		}
 	}
-	fmt.Println("Made it to the end of Get Volumes")
 	return mapOfRegions
 }
 
