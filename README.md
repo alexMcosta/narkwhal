@@ -56,6 +56,7 @@ The `-time` flag uses Cloudwatch to check if there was any activity from the EBS
 - Add the ability to scour multiple accounts.
 - Add the ability to choose which volumes to delete.
 - Add a silent mode option.
+- Add ability to filter by EBS type
 
 #### Major features
 - Make binaries to install on multiple platforms so it does not require go.
