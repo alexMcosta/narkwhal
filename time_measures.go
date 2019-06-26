@@ -3,7 +3,7 @@ package main
 import "strconv"
 
 func timeMeasures(t string) string {
-	//Get the last char to see if it is a 'd'
+	//Get the last char to see if it is a 'd' or 'w'
 	lastChar := t[len(t)-1:]
 
 	sNum := t[0 : len(t)-1]

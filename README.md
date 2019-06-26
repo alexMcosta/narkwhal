@@ -53,18 +53,13 @@ The `-time` flag uses Cloudwatch to check if there was any activity from the EBS
 ### Feature Roadmap
 
 #### Minor features
-- Add the ability to scour multiple accounts.
 - Add the ability to choose which volumes to delete.
-- Add a silent mode option.
 - Add ability to filter by EBS type
 
 #### Major features
 - Make binaries to install on multiple platforms so it does not require go.
 - Notifications.
-- Have Narkwhal take a config file so flags are not needed.
-- Create a Docker image to have Narkwhal run as a microservice in silent mode.
-- Create a GUI option and have it boot up on a localhost.
-- Add the ability to scour all accounts.
+- Create a Lambda version
 
 ## Authors
 
