@@ -71,7 +71,7 @@ The `-time` flag uses Cloudwatch to check if there was any activity from the EBS
 
 ## Authors
 
-* **Alex Costa** 
+* **Alex M. Costa** 
 
 ## License
 
