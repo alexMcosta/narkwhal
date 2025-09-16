@@ -22,6 +22,7 @@ jobs:
       - name: 'Qodana Scan'
         uses: JetBrains/qodana-action@v2025.1
         with:
+          args: --baseline, qodana.sarif.json
           pr-mode: false
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN_1177878074 }}
